@@ -27,6 +27,9 @@
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
+/* Keep the sticky header from covering a heading jumped to via #anchor. */
+:target, section[id], [id^="order-"] { scroll-margin-top: 88px; }
+
 body {
   margin: 0;
   font-family: var(--font);
@@ -208,6 +211,8 @@ p { margin: 0 0 1em; }
 .foot-bottom { padding-top: 22px; color: #8f8f9e; font-size: .87rem; }
 
 @media (max-width: 640px) {
+  /* The header stacks on small screens, so anchors need more clearance. */
+  :target, section[id], [id^="order-"] { scroll-margin-top: 140px; }
   .site-header .wrap { flex-direction: column; align-items: stretch; padding-block: 12px; gap: 10px; }
   .site-nav { justify-content: center; }
   .brand { justify-content: center; }

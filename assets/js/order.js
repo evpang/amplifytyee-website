@@ -332,6 +332,7 @@
       // Blocks checkout until the form is complete.
       onClick: function (data, actions) {
         payStatus.textContent = "";
+        payStatus.className = "pay-status";
         if (!validate(true)) return actions.reject();
         return actions.resolve();
       },
