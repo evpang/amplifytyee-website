@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tyee Music Hoodie Order Form — Amplify Tyee</title>
+<meta name="description" content="Order a Tyee music hoodie in red, white, or black. Supports Tyee Middle School band, orchestra, and choir students.">
+<link rel="canonical" href="https://amplifytyee.org/sweatshirts.html">
+<meta property="og:title" content="Tyee Music Hoodie Order Form">
+<meta property="og:description" content="Stay warm and show your Tyee music pride!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://amplifytyee.org/sweatshirts.html">
+<meta name="theme-color" content="#b3202e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23b3202e'/%3E%3Ctext x='50' y='72' font-size='62' text-anchor='middle' fill='white'%3E%E2%99%AA%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/store.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">&#9834;</span>
+      <span>
+        <span class="brand-name">Amplify Tyee</span>
+        <span class="brand-sub">Music Booster Club</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="index.html#support">Support</a>
+      <a href="index.html#connect">Connect</a>
+      <a class="nav-cta" href="sweatshirts.html" aria-current="page">Buy a Hoodie</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="store-hero">
+    <div class="wrap">
+      <span class="eyebrow">&#129509; Tyee Music Spiritwear</span>
+      <h1>Tyee Music Hoodie Order Form</h1>
+      <p class="lede">
+        Stay warm and show your Tyee music pride! This sweatshirt is designed for Tyee band,
+        orchestra, and choir students. Available in three colors to choose from, it&rsquo;s
+        perfect for concerts, rehearsals, and everyday wear.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap store-wrap">
+
+    <!-- Success receipt, revealed after payment ------------------------- -->
+    <div id="order-success" class="receipt" hidden tabindex="-1">
+      <div class="receipt-check" aria-hidden="true">&#10003;</div>
+      <h2>Payment complete</h2>
+      <p id="receipt-thanks"></p>
+      <div id="receipt-body"></div>
+      <p class="receipt-note">
+        A PayPal receipt has been emailed to you. Please keep it until your hoodie arrives.
+      </p>
+      <p><a class="btn btn-secondary" href="index.html">&#8592; Back to Amplify Tyee</a></p>
+    </div>
+
+    <form id="order-form" novalidate>
+
+      <!-- Student information ------------------------------------------ -->
+      <fieldset class="panel">
+        <legend><span class="step-num">1</span> Student Information</legend>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="firstName">First Name <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="firstName" name="firstName" autocomplete="given-name" required>
+            <p class="err" data-err-for="firstName" hidden></p>
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="lastName" name="lastName" autocomplete="family-name" required>
+            <p class="err" data-err-for="lastName" hidden></p>
+          </div>
+        </div>
+
+        <fieldset class="field choice-group" id="grade-group">
+          <legend>Student Grade: <span class="req" aria-hidden="true">*</span></legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="grade" value="6th Grade"> <span>6th Grade</span></label>
+            <label class="choice"><input type="radio" name="grade" value="7th Grade"> <span>7th Grade</span></label>
+            <label class="choice"><input type="radio" name="grade" value="8th Grade"> <span>8th Grade</span></label>
+          </div>
+          <p class="err" data-err-for="grade" hidden></p>
+        </fieldset>
+
+        <fieldset class="field choice-group" id="elective-group">
+          <legend>Elective: <span class="req" aria-hidden="true">*</span></legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="elective" value="Band"> <span>Band</span></label>
+            <label class="choice"><input type="radio" name="elective" value="Choir"> <span>Choir</span></label>
+            <label class="choice"><input type="radio" name="elective" value="Orchestra"> <span>Orchestra</span></label>
+          </div>
+          <p class="err" data-err-for="elective" hidden></p>
+        </fieldset>
+
+        <div class="field">
+          <label for="parentEmail">Parent email: <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="parentEmail" name="parentEmail" placeholder="example@example.com"
+                 autocomplete="email" inputmode="email" required>
+          <p class="hint">We&rsquo;ll send your order confirmation here.</p>
+          <p class="err" data-err-for="parentEmail" hidden></p>
+        </div>
+      </fieldset>
+
+      <!-- Products ----------------------------------------------------- -->
+      <fieldset class="panel">
+        <legend><span class="step-num">2</span> Choose Your Hoodies</legend>
+        <p class="panel-intro">Select a quantity and size for each color you&rsquo;d like.</p>
+
+        <div id="products" class="products"></div>
+        <p class="err err-block" data-err-for="products" hidden></p>
+      </fieldset>
+
+      <!-- Payment ------------------------------------------------------ -->
+      <fieldset class="panel">
+        <legend><span class="step-num">3</span> Payment</legend>
+
+        <div class="summary" id="summary">
+          <ul class="summary-lines" id="summary-lines"></ul>
+          <div class="summary-total">
+            <span>Total</span>
+            <strong id="total-amount">$0.00</strong>
+          </div>
+        </div>
+
+        <div id="pay-area">
+          <p class="panel-intro" id="pay-intro">Choose a PayPal option below to make your payment.</p>
+          <div id="paypal-button-container"></div>
+          <p class="pay-status" id="pay-status" role="status" aria-live="polite"></p>
+        </div>
+
+        <p class="fine-print" id="delivery-note"></p>
+      </fieldset>
+
+      <noscript>
+        <div class="notice notice-warn">
+          <strong>JavaScript is required to order online.</strong>
+          Please enable JavaScript, or email
+          <a href="mailto:amplifytyee@gmail.com">amplifytyee@gmail.com</a> to place your order.
+        </div>
+      </noscript>
+
+    </form>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Amplify Tyee</h4>
+        <p style="margin:0;">Advancing Music Programs, Learning, and Inspiration for Youth.
+           Supporting band, orchestra, choir, and theater at Tyee Middle School.</p>
+      </div>
+      <div>
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="sweatshirts.html">Buy a Music Hoodie</a></li>
+          <li><a href="index.html#support">Support Our Students</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:amplifytyee@gmail.com">amplifytyee@gmail.com</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61572966548657" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="https://www.youtube.com/@AMPLIFYTyee" target="_blank" rel="noopener">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; <span id="year">2026</span> Amplify Tyee &middot; A nonprofit booster club supporting the Tyee Middle School music department.
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/order.js"></script>
+</body>
+</html>
