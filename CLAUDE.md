@@ -176,10 +176,14 @@ bundle for `env:"production"` vs `env:"sandbox"`. The response is gzipped, so us
   Sheet's Apps Script project and published via *Manage deployments → Edit → New version*.
   *New deployment* changes the `/exec` URL and silently breaks recording. You can't do this
   step; the maintainer must.
-- **GitHub CLI:** the stored GitHub credential (Git Credential Manager, user `evpang`) has
-  `repo`/`workflow`/`gist` scopes but not `read:org`, so `gh auth login --with-token` rejects
-  it. `git push` works fine. For GitHub API calls (e.g. Pages settings) use `curl` with that
-  credential (`git credential fill`) and never print the token.
+- **GitHub CLI:** the Git Credential Manager token (user `evpang`) lacks `read:org`, so
+  `gh auth login --with-token` rejects it; `git push` uses that token and works fine. As of
+  2026-09-17 `gh` is logged in separately as `evpang` via the browser device flow (token in the
+  Windows keyring; scopes `gist`, `read:org`, `repo`; admin on the repo), so `gh api` / `gh repo`
+  work. `gh auth login` is interactive and can't be answered from agent tools: run
+  `echo "" | gh auth login --hostname github.com --git-protocol https --web` in the background,
+  read the one-time code from its output, and have the maintainer enter it at
+  <https://github.com/login/device>. Git's credential helper was not changed.
 - **GitHub Pages API:** `PUT /repos/{owner}/{repo}/pages` with `cname` *and* `https_enforced`
   together returned 404. Set `cname` alone, wait for `https_certificate.state == "approved"`,
   then set `https_enforced: true`. Removing/adding the custom domain makes GitHub commit
