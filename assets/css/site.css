@@ -99,12 +99,9 @@ p { margin: 0 0 1em; }
   padding: 8px 13px; border-radius: 8px;
 }
 .site-nav a:hover { background: var(--bg-alt); color: var(--ink); }
-.site-nav a[aria-current="page"] { color: var(--red); background: var(--red-soft); }
-.site-nav a.nav-cta {
-  background: var(--red); color: #fff;
-  box-shadow: 0 1px 3px rgba(179, 32, 46, .3);
-}
-.site-nav a.nav-cta:hover { background: var(--red-dark); color: #fff; }
+/* The highlighted menu item. aria-current="page" marks the page you're on; on the home page,
+   assets/js/nav.js moves it between Home / Donate / Connect ("location") as you scroll. */
+.site-nav a[aria-current] { color: var(--red); background: var(--red-soft); }
 /* Facebook / YouTube icon links at the end of the menu. 40px square keeps them easy to tap. */
 .site-nav a.nav-icon {
   display: inline-flex; align-items: center; justify-content: center;

@@ -256,6 +256,7 @@ refund in PayPal.
 │   ├── css/store.css       Order form styles
 │   ├── js/config.js        ← prices, sizes, PayPal settings, Sheet address
 │   ├── js/order.js         Totals, validation, PayPal checkout, order recording
+│   ├── js/nav.js           Home page: highlights Home / Donate / Connect in the menu as you scroll
 │   └── img/                Logo and hoodie photos
 ├── apps-script/Code.gs     Google Apps Script that records orders (copy of the deployed code)
 └── .claude/launch.json     Local preview server config

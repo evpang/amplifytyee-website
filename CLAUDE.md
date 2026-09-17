@@ -62,6 +62,7 @@ items* at the bottom (with the date).
 | `apps-script/Code.gs` | `doPost` appends to **Orders** and **Line Items** tabs and emails the board and the parent (parent email includes the PayPal transaction ID). `doGet` = health check. `testOrder` = manual end-to-end test |
 | `assets/css/site.css` | Shared styles and design tokens (`:root` vars; brand red `--red: #b3202e`) |
 | `assets/css/store.css` | Order form styles (only loaded by `sweatshirts.html`) |
+| `assets/js/nav.js` | Home page only: moves the menu highlight between Home / Donate / Connect |
 | `.claude/launch.json` | Preview server: `python -m http.server 4321` |
 
 Store behavior worth knowing:
@@ -83,6 +84,14 @@ Page conventions:
 - The Facebook and YouTube card titles **are** the links (`.card h3 a`): always underlined,
   with a CSS `↗` for `target="_blank"` (alt text `""` so screen readers skip it).
 - Menu social links are icon-only `a.nav-icon` (40px square) with `aria-label` and `title`.
+- **Menu highlight = where you are, and nothing else.** No menu item has permanent emphasis
+  (a red "Buy a Hoodie" call-to-action button was reported as a bug because it looked like the
+  current tab). The highlight is `.site-nav a[aria-current]`. `sweatshirts.html` sets it
+  statically on "Buy a Hoodie". On `index.html`, `assets/js/nav.js` moves it between Home
+  (`"page"`), Donate and Connect (`"location"`) on scroll, on load/hash (arriving from the
+  hoodie page), and immediately on click (held until the scroll finishes). It works out which
+  links are same-page sections from their `href`, so adding a menu link to a new `<section id>`
+  needs no JS change.
 - Header logo `assets/img/logo.png` is generated from `tyee-music-logo.jpg`: 192px, circular
   alpha mask. Pillow isn't installed here; it was made with PowerShell `System.Drawing`
   (`TextureBrush` + `FillEllipse`, anti-aliased).
