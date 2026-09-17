@@ -94,7 +94,7 @@ Page conventions:
 | Live site | `https://amplifytyee.org` (`www` redirects to apex; HTTPS enforced) |
 | GitHub repo | `https://github.com/evpang/amplifytyee-website` (public; Pages from `main` `/`) |
 | Apps Script web app | `APPS_SCRIPT_URL` in `config.js` |
-| PayPal | Sandbox Client ID currently in `config.js` (`PAYPAL_SANDBOX: true`) |
+| PayPal | **Live** Client ID in `config.js` (`PAYPAL_SANDBOX: false`). The sandbox Client ID for testing is in git history (commit `5602169`). |
 | PayPal donate button | `https://www.paypal.com/donate?campaign_id=DJWLA42FHYME8` ("Every Note Matters–Amplify the Music Fund 2026-27", recipient Amplify Tyee) |
 | Zelle donate button | `https://enroll.zellepay.com/qr-codes?data=…` (base64 decodes to `{"name":"AMPLIFY TYEE","action":"payment","token":"amplifytyee@gmail.com"}`) |
 | **Not** a donate link | `https://www.paypal.com/ncp/payment/4BRA2293PWVWL` is the **Tyee Music Sweatshirt checkout**. It was once mislabeled "Donate with PayPal" here; don't repeat that. |
@@ -132,8 +132,9 @@ and sends real emails):
   `MailApp`, `LockService`, `ContentService` and inspect what `MailApp.sendEmail` receives.
 
 **PayPal Client ID check:** `https://www.paypal.com/sdk/js?client-id=<ID>` returns 200 (JS) for
-a valid ID and 400 `client-id not recognized` otherwise. A sandbox ID's bundle contains
-`env:"sandbox"` in its payload builder.
+a valid ID and 400 `client-id not recognized` otherwise. To tell Live from Sandbox, grep the
+bundle for `env:"production"` vs `env:"sandbox"`. The response is gzipped, so use
+`curl --compressed`; without it the grep silently finds nothing.
 
 ## Traps already hit
 
@@ -160,22 +161,22 @@ a valid ID and 400 `client-id not recognized` otherwise. A sandbox ID's bundle c
 ## Current status and open items (as of 2026-09-16)
 
 Done and live: both pages, domain + HTTPS, Google Sheet recording (Apps Script deployed),
-PayPal checkout in **sandbox** mode, donate buttons (PayPal campaign + Zelle), Tyee Music logo
-in header, Facebook/YouTube in menu and cards.
+**PayPal checkout in Live mode** (Live Client ID verified as `production`, buttons render, no
+test notice), donate buttons (PayPal campaign + Zelle), Tyee Music logo in header,
+Facebook/YouTube in menu and cards.
 
 Open:
-1. **Sandbox end-to-end test not yet confirmed** by the maintainer (payment → receipt → both
-   Sheet tabs with Capture ID → board + parent emails).
-2. **Go live with PayPal:** waiting on the Live Client ID. Then set `PAYPAL_CLIENT_ID` and
-   `PAYPAL_SANDBOX: false` in `config.js`, verify buttons render (SDK check above), push.
-3. **Unconfirmed that the deployed Apps Script is current.** Commit `86694ab` added the PayPal
+1. **No order has been verified end to end.** The maintainer never confirmed the sandbox test
+   before switching to Live. Watch the first real order: receipt shown → row in both Sheet
+   tabs with a PayPal Capture ID → board + parent emails. Never place a real order yourself.
+2. **Unconfirmed that the deployed Apps Script is current.** Commit `86694ab` added the PayPal
    transaction ID to the parent email; the maintainer was given redeploy steps but hasn't
    confirmed.
-4. **Turn off the Jotform** (`262537613078158`) once live PayPal works, so orders don't split.
+3. **Turn off the Jotform** (`262537613078158`) once live PayPal works, so orders don't split.
    The PTSA page still links "Purchase Music Sweatshirt" to the `4BRA2293PWVWL` PayPal
    checkout, which bypasses the form (no student, grade, or size captured). The PTSA site
    isn't ours to edit; flag it to the maintainer.
-5. Optional: menu says **Donate**, but the hero button, section heading, and footer link still
+4. Optional: menu says **Donate**, but the hero button, section heading, and footer link still
    say "Support Our Students" (the maintainer hasn't decided).
-6. Optional: favicon is still the old red ♪ data-URI square in both pages' `<head>`; could use
+5. Optional: favicon is still the old red ♪ data-URI square in both pages' `<head>`; could use
    the Tyee Music logo.

@@ -20,12 +20,12 @@ window.AMPLIFY_CONFIG = {
      While this is "", the order form still displays but checkout is
      replaced with a friendly "ordering opens soon" message.
      ---------------------------------------------------------------------- */
-  PAYPAL_CLIENT_ID: "BAAjr9szStrjnm7Q989se5CZjvfqvMFZ-wdVTqXZu7FD2xVYhXlPJehgegC-acJmi2vcv-BD2_MLvwv5AQ",
+  PAYPAL_CLIENT_ID: "BAAHltazF3vq2h4QEZGwDIkLDOb-A5K-Lp_85FNCEJZemOhZD3VIREz5calvFV8lkoaANHZ0w9kPlIENPw",
 
   /* true  = the Client ID above is a SANDBOX (fake money) ID. The store shows
              a "Test mode" notice so real parents know not to use it.
      false = LIVE ID, real payments. Set this when you switch to Live. */
-  PAYPAL_SANDBOX: true,
+  PAYPAL_SANDBOX: false,
 
   /* ----------------------------------------------------------------------
      2) ORDER RECORDING        (leave "" to skip — see README.md)

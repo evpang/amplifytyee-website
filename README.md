@@ -41,7 +41,8 @@ a minute. That is deliberate: a volunteer-run club shouldn't inherit a toolchain
 | Home page and hoodie page | ✅ Live |
 | Domain `amplifytyee.org` + HTTPS | ✅ Live |
 | Orders recorded to Google Sheet | ✅ Connected |
-| PayPal checkout | ⚠️ **Sandbox (test) mode.** The store shows a "Test mode — no real payments" notice. See [Go live with PayPal](#go-live-with-paypal). |
+| PayPal checkout | ✅ **Live: real payments** into the Amplify Tyee PayPal account. See [PayPal: live and test mode](#paypal-live-and-test-mode). |
+| Old Jotform hoodie form | ⚠️ Turn it off once the new store has taken a real order, so orders don't split between two systems. |
 
 ---
 
@@ -137,28 +138,28 @@ Size · Quantity · Line Total · PayPal Capture ID
 
 ---
 
-## Go live with PayPal
+## PayPal: live and test mode
 
-1. At <https://developer.paypal.com/dashboard/>, sign in with the **Amplify Tyee PayPal
-   account**, open **Apps & Credentials**, switch the toggle to **Live**, and **Create App**
-   (type: Merchant).
-2. Copy the **Client ID**. (Never copy the *Secret* anywhere: it is not needed, and this
-   repository is public.)
-3. In `assets/js/config.js`, set **both**:
-   ```js
-   PAYPAL_CLIENT_ID: "the-live-client-id",
-   PAYPAL_SANDBOX: false,
-   ```
-   If `PAYPAL_SANDBOX` stays `true`, the store keeps showing the test-mode notice.
-4. Commit and push.
-5. Once real orders work, turn off the old Jotform hoodie form so orders don't split between
-   two systems.
+Checkout is **live**: `config.js` has the Live Client ID and `PAYPAL_SANDBOX: false`. Both
+Client IDs come from <https://developer.paypal.com/dashboard/> → **Apps & Credentials**,
+signed in with the Amplify Tyee PayPal account; the toggle at the top switches between
+**Live** and **Sandbox**. Only ever copy the **Client ID**. Never copy the *Secret*: the site
+doesn't use it, and this repository is public.
 
-**Test before taking real money.** With the sandbox Client ID in place (the current state),
-get a fake buyer login from the PayPal developer dashboard (**Testing Tools → Sandbox
-Accounts** → the *Personal* account → **View/Edit account**), place an order on the live site,
-and confirm: the green *Payment complete* box, a row in both Sheet tabs with a PayPal Capture
-ID, and both emails. Then delete the test rows.
+**To test a change without real money,** temporarily set in `assets/js/config.js`:
+
+```js
+PAYPAL_CLIENT_ID: "the-sandbox-client-id",
+PAYPAL_SANDBOX: true,     // shows a "Test mode — no real payments" notice on the store
+```
+
+Push, then place an order using a fake buyer login from the developer dashboard
+(**Testing Tools → Sandbox Accounts** → the *Personal* account → **View/Edit account**).
+Confirm the green *Payment complete* box, a row in both Sheet tabs with a PayPal Capture ID,
+and both emails. Then delete the test rows and switch **both** settings back to the Live
+Client ID and `false`. If `PAYPAL_SANDBOX` is left `true`, the test-mode notice stays up.
+
+(The sandbox Client ID used for testing is in the git history, commit `5602169`.)
 
 ---
 
@@ -226,7 +227,7 @@ Then open <http://localhost:4321>.
 **The store says "Online ordering opens soon."** `PAYPAL_CLIENT_ID` in `config.js` is empty.
 
 **The store says "Test mode — no real payments."** `PAYPAL_SANDBOX` is `true`. See
-[Go live with PayPal](#go-live-with-paypal).
+[PayPal: live and test mode](#paypal-live-and-test-mode).
 
 **Payment works but nothing appears in the Sheet.** Open the browser console (F12). A warning
 about `APPS_SCRIPT_URL` means it's empty. Otherwise check the deployment's *Who has access* is
