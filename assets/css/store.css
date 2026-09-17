@@ -165,3 +165,6 @@ select:disabled { background-color: #f4f4f7; color: var(--muted); cursor: not-al
   .receipt-meta { grid-template-columns: 1fr; gap: 2px; }
   .receipt-meta dd { margin-bottom: 10px; }
 }
+
+/* Sandbox test-mode banner, shown above the PayPal buttons. */
+.notice-test { margin: 0 0 18px; }

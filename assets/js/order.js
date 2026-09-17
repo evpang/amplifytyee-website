@@ -306,6 +306,16 @@
       return;
     }
 
+    if (CFG.PAYPAL_SANDBOX) {
+      var t = document.createElement("div");
+      t.className = "notice notice-warn notice-test";
+      t.innerHTML =
+        "<strong>Test mode &mdash; no real payments.</strong> Checkout is connected to PayPal&rsquo;s " +
+        "sandbox for testing. Real orders open soon; until then, email " +
+        '<a href="mailto:' + esc(CFG.CONTACT_EMAIL) + '">' + esc(CFG.CONTACT_EMAIL) + "</a>.";
+      payArea.insertBefore(t, payArea.firstChild);
+    }
+
     var s = document.createElement("script");
     s.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(id) +
             "&currency=" + encodeURIComponent(CUR) +
