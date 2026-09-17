@@ -28,7 +28,7 @@ window.AMPLIFY_CONFIG = {
      The Google Apps Script web-app URL that writes each paid order into
      your Google Sheet and emails the board. Ends in /exec
      ---------------------------------------------------------------------- */
-  APPS_SCRIPT_URL: "",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzldTCTa4120yKexV66tZ74W3y-3J7GOPy_aZjGyosHml-x2ADbletvVgJ58zOzvsnG/exec",
 
   /* Where order notifications are sent / who parents should contact. */
   CONTACT_EMAIL: "amplifytyee@gmail.com",
