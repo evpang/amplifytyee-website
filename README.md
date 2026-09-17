@@ -70,7 +70,7 @@ Wording is plain HTML. A few things appear in more than one place, so change all
 |---|---|
 | **Top menu** (Home · Donate · Buy a Hoodie · Connect · Facebook · YouTube) | In **both** `index.html` and `sweatshirts.html`. Keep them identical. |
 | **Footer** | In **both** pages. |
-| **Links to the home page** | Write them as `./` and `./#support`, not `index.html#support`. Visitors arrive at `amplifytyee.org/`, and an `index.html` link makes the browser reload the page instead of scrolling. |
+| **Links to the home page** | Write them as `./` and `./#donate`, not `index.html#donate`. Visitors arrive at `amplifytyee.org/`, and an `index.html` link makes the browser reload the page instead of scrolling. |
 | **Facebook link** `facebook.com/profile.php?id=61572966548657` | Top menu (both pages) and the "Follow us on Facebook" card title |
 | **YouTube link** `youtube.com/@AMPLIFYTyee` | Top menu (both pages) and the "Subscribe to our YouTube Channel" card title |
 | **Donate with PayPal** button | `index.html`, "PayPal or Zelle" card. Currently the PayPal donation campaign *Every Note Matters–Amplify the Music Fund 2026-27* (`paypal.com/donate?campaign_id=DJWLA42FHYME8`). |
@@ -84,7 +84,9 @@ Wording is plain HTML. A few things appear in more than one place, so change all
 | File | Use |
 |---|---|
 | `assets/img/tyee-music-logo.jpg` | Original Tyee Music logo artwork (1459×1459). Keep as the source. |
-| `assets/img/logo.png` | Header logo: 192×192, cut to a circle with transparent corners (the JPG has black corners). |
+| `assets/img/logo.png` | Header logo: 192×192, cut to a circle with transparent corners (the JPG has black corners). Also the large browser icon. |
+| `assets/img/favicon-32.png`, `favicon-48.png` | Browser tab icon (same round logo, sized for tabs) |
+| `assets/img/apple-touch-icon.png` | 180×180 icon on a white background, used when someone adds the site to an iPhone/iPad home screen |
 | `assets/img/red.png`, `white.png`, `black.png` | Hoodie photos on the order form |
 
 ### Publish a change

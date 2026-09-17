@@ -94,12 +94,16 @@ Page conventions:
   from their `href`, so adding a menu link to a new `<section id>` needs no JS change.
 - **Link to the home page as `./` and `./#section`, never `index.html` / `index.html#section`**
   (both pages: logo, menu, footer, receipt "Back" button). Visitors arrive at
-  `amplifytyee.org/`; a link to `index.html#support` is a different URL, so the browser did a
+  `amplifytyee.org/`; a link to `index.html#donate` is a different URL, so the browser did a
   full page reload instead of scrolling. (The local preview server also serves `/`; opening the
   HTML file directly via `file://` isn't supported.)
 - Header logo `assets/img/logo.png` is generated from `tyee-music-logo.jpg`: 192px, circular
   alpha mask. Pillow isn't installed here; it was made with PowerShell `System.Drawing`
-  (`TextureBrush` + `FillEllipse`, anti-aliased).
+  (`TextureBrush` + `FillEllipse`, anti-aliased). The browser-tab icons are made the same way:
+  `favicon-32.png` and `favicon-48.png` (transparent corners; downscaled via a 512px
+  intermediate for a cleaner result), and `apple-touch-icon.png` (180px, logo inset 10px on
+  opaque white, because iOS fills transparency with black). Both pages' `<head>` link all four
+  (32, 48, 192 = `logo.png`, apple-touch). Keep those `<link>` tags identical across pages.
 
 ## Key identifiers
 
@@ -200,5 +204,3 @@ Open:
    isn't ours to edit; flag it to the maintainer.
 3. Optional: menu says **Donate**, but the hero button, section heading, and footer link still
    say "Support Our Students" (the maintainer hasn't decided).
-4. Optional: favicon is still the old red ♪ data-URI square in both pages' `<head>`; could use
-   the Tyee Music logo.

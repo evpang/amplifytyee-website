@@ -4,14 +4,14 @@
    Donate and Connect are sections of the home page, not separate pages, so
    the highlight has to follow where you are: Home at the top, Donate once the
    "Support Our Students" section reaches the header, Connect for "Stay
-   Connected". It updates on scroll, on load (e.g. arriving at #support from
+   Connected". It updates on scroll, on load (e.g. arriving at #donate from
    the hoodie page), and immediately when a menu item is clicked.
 
    Pages whose menu has no links to sections of that same page keep their
    static aria-current (e.g. "Buy a Hoodie" on sweatshirts.html).
 
-   Links to the home page are written as "./" and "./#support" (not
-   "index.html#support") so that a visitor on amplifytyee.org/ stays on the
+   Links to the home page are written as "./" and "./#donate" (not
+   "index.html#donate") so that a visitor on amplifytyee.org/ stays on the
    same URL and the browser scrolls instead of reloading the page.
    ========================================================================== */
 (function () {
