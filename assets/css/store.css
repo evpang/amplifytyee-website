@@ -29,6 +29,48 @@
 }
 .panel-intro { color: var(--muted); font-size: .94rem; margin: 6px 0 18px; }
 
+/* A <button> that looks like a link (e.g. "Size chart", which opens a popup). */
+.link-button {
+  background: none; border: 0; padding: 2px 0; margin-left: 4px; font: inherit; font-weight: 650;
+  color: var(--red); text-decoration: underline; text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px; cursor: pointer; white-space: nowrap;
+}
+.link-button:hover { color: var(--red-dark); text-decoration-thickness: 2.5px; }
+
+/* Each color's "Size" label with its "Size chart" link beside it. The row is no taller than a
+   plain label, so the Size dropdown stays level with the Quantity dropdown next to it. */
+.label-row { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 10px; margin-bottom: 7px; }
+.label-row label { margin-bottom: 0; }
+.label-row .link-button { margin-left: 0; padding: 0; font-size: .86rem; line-height: inherit; }
+
+/* Size chart popup ------------------------------------------------------- */
+.size-dialog {
+  border: 0; padding: 0; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  width: min(520px, calc(100% - 32px)); max-height: calc(100% - 32px); color: var(--ink);
+}
+.size-dialog::backdrop { background: rgba(20, 20, 30, .55); }
+.size-dialog-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 12px 4px 22px;
+}
+.size-dialog-head h2 { margin: 0; font-size: 1.3rem; }
+.dialog-close {
+  width: 40px; height: 40px; flex: none; border: 0; border-radius: 10px; background: transparent;
+  font-size: 1.7rem; line-height: 1; color: var(--muted); cursor: pointer;
+}
+.dialog-close:hover { background: var(--bg-alt); color: var(--ink); }
+.size-dialog-body { padding: 0 22px 22px; }
+.size-note { color: var(--muted); font-size: .92rem; margin: 0 0 12px; }
+.size-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.size-table th, .size-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.size-table thead th {
+  font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
+  border-bottom-width: 2px;
+}
+.size-table tbody th { font-weight: 700; white-space: nowrap; }
+.size-table tbody td:first-of-type { white-space: nowrap; }   /* keep "30–32”" on one line */
+.size-table tbody tr:last-child th, .size-table tbody tr:last-child td { border-bottom: 0; }
+
 /* Fields ----------------------------------------------------------------- */
 .field { margin-bottom: 18px; min-width: 0; }
 .field:last-child { margin-bottom: 0; }
@@ -164,6 +206,9 @@ select:disabled { background-color: #f4f4f7; color: var(--muted); cursor: not-al
   .receipt { padding: 24px 19px; }
   .receipt-meta { grid-template-columns: 1fr; gap: 2px; }
   .receipt-meta dd { margin-bottom: 10px; }
+  .size-dialog-head { padding: 14px 8px 4px 18px; }
+  .size-dialog-body { padding: 0 14px 16px; }
+  .size-table th, .size-table td { padding: 9px 6px; }
 }
 
 /* Sandbox test-mode banner, shown above the PayPal buttons. */

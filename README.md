@@ -56,7 +56,7 @@ Almost everything about the store lives in this one file.
 |---|---|
 | Change a hoodie price | `PRODUCTS` → `price` |
 | Add or retire a color | Add/remove a block in `PRODUCTS` (put the photo in `assets/img/`) |
-| Change the size list | `SIZES` (`short` goes on the PayPal receipt; `label` is shown to parents and saved to the Sheet) |
+| Change the size list or the size chart | `SIZES`. `name` is what parents pick in the size dropdown and what goes on the PayPal receipt and in the Sheet. `chest` and `height` appear only in the **Size chart** popup. Use curly quotes `”` `’` for inches and feet; a straight `"` breaks the store. |
 | Change the per-color order limit | `MAX_QTY` |
 | Change the contact email | `CONTACT_EMAIL` |
 | Change the message after payment | `THANK_YOU` |

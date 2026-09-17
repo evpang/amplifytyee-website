@@ -57,7 +57,7 @@ items* at the bottom (with the date).
 
 | File | Responsibility |
 |---|---|
-| `assets/js/config.js` | All store settings: `PAYPAL_CLIENT_ID`, `PAYPAL_SANDBOX`, `APPS_SCRIPT_URL`, `CONTACT_EMAIL`, `MAX_QTY`, `SIZES` (`short` for PayPal, `label` for UI/Sheet), `PRODUCTS`, `THANK_YOU` |
+| `assets/js/config.js` | All store settings: `PAYPAL_CLIENT_ID`, `PAYPAL_SANDBOX`, `APPS_SCRIPT_URL`, `CONTACT_EMAIL`, `MAX_QTY`, `SIZES` (`name`, `chest`, `height`), `PRODUCTS`, `THANK_YOU` |
 | `assets/js/order.js` | IIFE. Renders products from config, recomputes totals in integer cents, validates (size required only when that color's qty > 0), loads the PayPal JS SDK on demand, `onClick` → `actions.reject()` until valid, captures, POSTs the order to Apps Script, shows the receipt |
 | `apps-script/Code.gs` | `doPost` appends to **Orders** and **Line Items** tabs and emails the board and the parent (parent email includes the PayPal transaction ID). `doGet` = health check. `testOrder` = manual end-to-end test |
 | `assets/css/site.css` | Shared styles and design tokens (`:root` vars; brand red `--red: #b3202e`) |
@@ -73,6 +73,19 @@ Store behavior worth knowing:
 - Order POST uses `Content-Type: text/plain` (a CORS "simple request", so no preflight), with a
   `mode: "no-cors"` retry. Logging failure never blocks the parent; the receipt shows a
   forward-your-receipt note instead.
+- Sizes: the dropdown shows only `SIZES[].name`. Each color's "Size" label has a
+  "📏 Size chart" `button.size-chart-link` beside it (rendered by `renderProducts()` inside
+  `.label-row`, sized so the Size and Quantity dropdowns stay level). All three open one native
+  `<dialog id="size-chart">` whose table rows are built from `SIZES` (name/chest/height), via a
+  click listener on `#products`. Closes via ×, Esc (handled explicitly: the embedded test
+  browser didn't close on Esc natively), or a backdrop click; focus returns to whichever link
+  opened it. The dialog sits outside `<form>` so its buttons can't submit it.
+- Order payload keeps both `items[].size` and `items[].sizeShort` (both = size name) because the
+  deployed `Code.gs` writes `size` to the Sheet and uses `sizeShort` in emails. Don't rename
+  them without redeploying the Apps Script.
+- `config.js` strings: a straight `"` inside a label (e.g. `58"`) breaks the file and the whole
+  store (no products, no PayPal). The maintainer did this once by hand. After any edit, run
+  the config-parses check below; use curly `”` `’`.
 - Known, accepted trade-off: the total is computed client-side. The Sheet stores PayPal Capture
   ID and PayPal Amount for reconciliation. Rows with no Capture ID are not real payments.
 

@@ -157,6 +157,23 @@
       </noscript>
 
     </form>
+
+    <!-- Size chart popup. Rows are filled in from SIZES in assets/js/config.js. -->
+    <dialog id="size-chart" class="size-dialog" aria-labelledby="size-chart-title">
+      <div class="size-dialog-head">
+        <h2 id="size-chart-title">Size chart</h2>
+        <button type="button" class="dialog-close" aria-label="Close size chart">&times;</button>
+      </div>
+      <div class="size-dialog-body">
+        <p class="size-note">Recommended sizes. The same sizes apply to all three colors.</p>
+        <table class="size-table">
+          <thead>
+            <tr><th scope="col">Size</th><th scope="col">Chest</th><th scope="col">Recommended height</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </dialog>
   </div>
 
 </main>

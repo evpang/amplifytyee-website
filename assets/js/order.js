@@ -54,7 +54,7 @@
         qtyOpts += '<option value="' + i + '">' + i + "</option>";
       }
       var sizeOpts = SIZES.map(function (s, i) {
-        return '<option value="' + i + '">' + esc(s.label) + "</option>";
+        return '<option value="' + i + '">' + esc(s.name) + "</option>";
       }).join("");
 
       return (
@@ -71,7 +71,11 @@
                 '<select id="qty-' + esc(p.id) + '" class="qty" data-qty="' + esc(p.id) + '">' + qtyOpts + "</select>" +
               "</div>" +
               '<div class="field field-grow">' +
-                '<label for="size-' + esc(p.id) + '">Size</label>' +
+                '<div class="label-row">' +
+                  '<label for="size-' + esc(p.id) + '">Size</label>' +
+                  '<button type="button" class="link-button size-chart-link" aria-haspopup="dialog">' +
+                    '<span aria-hidden="true">&#128207;</span> Size chart</button>' +
+                "</div>" +
                 '<select id="size-' + esc(p.id) + '" class="size" data-size="' + esc(p.id) + '" disabled>' +
                   '<option value="">Select a size…</option>' + sizeOpts +
                 "</select>" +
@@ -99,8 +103,7 @@
         name: p.name,
         qty: qty,
         unitCents: toCents(p.price),
-        sizeShort: size ? size.short : null,
-        sizeLabel: size ? size.label : null
+        sizeShort: size ? size.name : null
       });
     });
     return lines;
@@ -216,8 +219,10 @@
       elective: (form.querySelector('input[name="elective"]:checked') || {}).value || "",
       parentEmail: document.getElementById("parentEmail").value.trim(),
       items: lines.map(function (l) {
+        // Code.gs writes "size" to the Sheet and uses "sizeShort" in emails; both are the
+        // size name (e.g. "Adult M"). Keep both keys so the deployed script needs no change.
         return {
-          product: l.name, size: l.sizeLabel, sizeShort: l.sizeShort,
+          product: l.name, size: l.sizeShort, sizeShort: l.sizeShort,
           quantity: l.qty, unitPrice: (l.unitCents / 100).toFixed(2),
           lineTotal: (l.unitCents * l.qty / 100).toFixed(2)
         };
@@ -421,10 +426,54 @@
     }).render("#paypal-button-container");
   }
 
+  /* ----------------------------------------------------------- size chart */
+
+  // Each color's "Size" label has a "Size chart" link that opens one shared popup
+  // table built from SIZES, so config.js stays the only place sizes are defined.
+  // Closes with the × button, Esc, or a click outside.
+  function setupSizeChart() {
+    var dialog = document.getElementById("size-chart");
+    if (!dialog) return;
+    var opener = null;   // the link that opened the chart, to return focus to
+
+    dialog.querySelector("tbody").innerHTML = SIZES.map(function (s) {
+      return "<tr><th scope=\"row\">" + esc(s.name) + "</th><td>" + esc(s.chest || "") +
+             "</td><td>" + esc(s.height || "") + "</td></tr>";
+    }).join("");
+
+    function open() {
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+    }
+    function close() {
+      if (typeof dialog.close === "function") dialog.close();
+      else dialog.removeAttribute("open");
+    }
+
+    productsEl.addEventListener("click", function (e) {
+      var link = e.target.closest(".size-chart-link");
+      if (!link) return;
+      opener = link;
+      open();
+    });
+    dialog.querySelector(".dialog-close").addEventListener("click", close);
+    // Browsers are supposed to close a modal dialog on Esc themselves, but not every
+    // browser does it reliably, so handle Esc explicitly.
+    dialog.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); close(); }
+    });
+    // Put keyboard focus back on the link that was used (Safari doesn't do this on its own).
+    dialog.addEventListener("close", function () { if (opener) opener.focus(); });
+    // The dialog's content fills it edge to edge, so a click whose target is the
+    // dialog element itself landed on the dimmed backdrop.
+    dialog.addEventListener("click", function (e) { if (e.target === dialog) close(); });
+  }
+
   /* ----------------------------------------------------------------- init */
 
   renderProducts();
   recompute();
+  setupSizeChart();
 
   form.addEventListener("change", function (e) {
     if (e.target.matches(".qty, .size")) recompute();

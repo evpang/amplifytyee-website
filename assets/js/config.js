@@ -45,15 +45,19 @@ window.AMPLIFY_CONFIG = {
 
   /* ----------------------------------------------------------------------
      3) SIZES — shared by every color.
-        "short" is what appears on the PayPal receipt (kept brief).
-        "label" is what parents see and what is written to the Sheet.
+        "name"   is what parents pick in the size dropdown. It is also what goes
+                 on the PayPal receipt and into the Sheet's Size column.
+        "chest" and "height" are shown only in the "Size chart" popup.
+
+        For inches and feet use curly quotes ” and ’ (as below). A straight
+        double quote " ends the text early and breaks the whole store.
      ---------------------------------------------------------------------- */
   SIZES: [
-    { short: "Youth L",  label: "Youth L (chest 30–32”) → height ~58–64” (4’10”–5’4”)" },
-    { short: "Youth XL", label: "Youth XL (chest 32–35”) → height ~64–66” (5’4”–5’6”)" },
-    { short: "Adult S",  label: "Adult S (chest 35–37”) → fits most 5’5”–5’7”" },
-    { short: "Adult M",  label: "Adult M (chest 38–40”) → fits most 5’6”–5’9”" },
-    { short: "Adult L",  label: "Adult L (chest 41–43”) → fits most 5’8”–6’0”" }
+    { name: "Youth L",  chest: "30–32”", height: "Under 58” (4’10”)" },
+    { name: "Youth XL", chest: "32–35”", height: "~58–60” (4’10”–5’0”)" },
+    { name: "Adult S",  chest: "35–37”", height: "5’0”–5’5”" },
+    { name: "Adult M",  chest: "38–40”", height: "5’6”–5’9”" },
+    { name: "Adult L",  chest: "41–43”", height: "5’8”–6’0”" }
   ],
 
   /* ----------------------------------------------------------------------
