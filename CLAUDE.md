@@ -97,6 +97,9 @@ Page conventions:
 - The Facebook and YouTube card titles **are** the links (`.card h3 a`): always underlined,
   with a CSS `↗` for `target="_blank"` (alt text `""` so screen readers skip it).
 - Menu social links are icon-only `a.nav-icon` (40px square) with `aria-label` and `title`.
+- The "Donate with PayPal" / "Donate with Zelle" buttons start with an inline Simple Icons SVG
+  (`svg.btn-icon`, `fill="currentColor"`) so the logo is white like the button text. The brand
+  colours (PayPal `#003087`, Zelle `#6D1ED4`) are too dark to read on the red `.btn-primary`.
 - **Menu highlight = where you are, and nothing else.** No menu item has permanent emphasis
   (a red "Buy a Hoodie" call-to-action button was reported as a bug because it looked like the
   current tab). The highlight is `.site-nav a[aria-current]`. `sweatshirts.html` sets it

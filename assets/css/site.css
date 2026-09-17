@@ -118,6 +118,9 @@ p { margin: 0 0 1em; }
   cursor: pointer; transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
 }
 .btn:active { transform: translateY(1px); }
+/* Logo inside a button (e.g. PayPal / Zelle on the donate buttons). Drawn in the button's text
+   colour (fill="currentColor"), so it stays readable on the red buttons. */
+.btn-icon { width: 1.2em; height: 1.2em; flex: none; }
 .btn-primary { background: var(--red); color: #fff; box-shadow: 0 2px 10px rgba(179, 32, 46, .3); }
 .btn-primary:hover { background: var(--red-dark); color: #fff; }
 .btn-secondary { background: #fff; color: var(--ink); border-color: var(--line); box-shadow: var(--shadow); }
