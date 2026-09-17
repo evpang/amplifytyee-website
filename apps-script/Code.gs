@@ -214,9 +214,9 @@ function testOrder() {
     paypalStatus: "COMPLETED", paypalAmount: "60.00",
     payerName: "Test Payer", payerEmail: BOARD_EMAIL,
     items: [
-      { product: "Red Sweatshirt", size: "Adult M (chest 38-40in)", sizeShort: "Adult M",
+      { product: "Red Sweatshirt", size: "Adult M", sizeShort: "Adult M",
         quantity: 1, unitPrice: "30.00", lineTotal: "30.00" },
-      { product: "Black Sweatshirt", size: "Adult L (chest 41-43in)", sizeShort: "Adult L",
+      { product: "Black Sweatshirt", size: "Adult L", sizeShort: "Adult L",
         quantity: 1, unitPrice: "30.00", lineTotal: "30.00" }
     ]
   };
