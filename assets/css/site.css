@@ -105,6 +105,13 @@ p { margin: 0 0 1em; }
   box-shadow: 0 1px 3px rgba(179, 32, 46, .3);
 }
 .site-nav a.nav-cta:hover { background: var(--red-dark); color: #fff; }
+/* Facebook / YouTube icon links at the end of the menu. 40px square keeps them easy to tap. */
+.site-nav a.nav-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; padding: 0;
+}
+.site-nav a:not(.nav-icon) + a.nav-icon { margin-left: 4px; }
+.nav-icon svg { width: 22px; height: 22px; display: block; }
 
 /* Buttons ---------------------------------------------------------------- */
 .btn {
