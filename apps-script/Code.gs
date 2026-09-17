@@ -156,14 +156,29 @@ function notify(order, summary) {
   }
 
   if (SEND_PARENT_CONFIRMATION && order.parentEmail) {
-    var parentBody = [
+    var parentLines = [
       "Hi,",
       "",
       "Thank you for your order and for supporting Tyee Music!",
       "",
       "Student: " + student + " (" + (order.grade || "") + ", " + (order.elective || "") + ")",
       "Order:   " + summary,
-      "Total:   $" + (order.total || "0.00"),
+      "Total:   $" + (order.total || "0.00")
+    ];
+
+    // The capture ID is the transaction ID PayPal shows in the buyer's own
+    // receipt and account activity, so parents can match the two.
+    if (order.paypalCaptureId) {
+      parentLines.push(
+        "",
+        "PayPal confirmation",
+        "Transaction ID: " + order.paypalCaptureId,
+        "Amount paid:    $" + (order.paypalAmount || order.total || "0.00"),
+        "This matches the receipt PayPal emailed to the account that paid."
+      );
+    }
+
+    var parentBody = parentLines.concat([
       "",
       "Once the sweatshirts arrive, we will deliver them to your student in class.",
       "",
@@ -171,7 +186,7 @@ function notify(order, summary) {
       "",
       "— Amplify Tyee",
       "Advancing Music Programs, Learning, and Inspiration for Youth"
-    ].join("\n");
+    ]).join("\n");
 
     try {
       MailApp.sendEmail({
