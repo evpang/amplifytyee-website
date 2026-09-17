@@ -40,7 +40,7 @@ a minute. That is deliberate: a volunteer-run club shouldn't inherit a toolchain
 |---|---|
 | Home page and hoodie page | ✅ Live |
 | Domain `amplifytyee.org` + HTTPS | ✅ Live |
-| Orders recorded to Google Sheet | ✅ Connected |
+| Orders recorded to Google Sheet | ✅ Connected. The deployed Apps Script matches `apps-script/Code.gs` (confirmed 2026-09-16). |
 | PayPal checkout | ✅ **Live: real payments** into the Amplify Tyee PayPal account. See [PayPal: live and test mode](#paypal-live-and-test-mode). |
 | Old Jotform hoodie form | ⚠️ Turn it off once the new store has taken a real order, so orders don't split between two systems. |
 

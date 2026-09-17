@@ -160,23 +160,27 @@ bundle for `env:"production"` vs `env:"sandbox"`. The response is gzipped, so us
 
 ## Current status and open items (as of 2026-09-16)
 
-Done and live: both pages, domain + HTTPS, Google Sheet recording (Apps Script deployed),
-**PayPal checkout in Live mode** (Live Client ID verified as `production`, buttons render, no
-test notice), donate buttons (PayPal campaign + Zelle), Tyee Music logo in header,
-Facebook/YouTube in menu and cards.
+Done and live: both pages, domain + HTTPS, Google Sheet recording, **PayPal checkout in Live
+mode** (Live Client ID verified as `production`, buttons render, no test notice), donate
+buttons (PayPal campaign + Zelle), Tyee Music logo in header, Facebook/YouTube in menu and
+cards.
+
+**Apps Script is current.** The maintainer confirmed on 2026-09-16 that the deployed script
+matches `apps-script/Code.gs` (latest change: commit `86694ab`, PayPal transaction ID in the
+parent email), republished as a new version of the same deployment. The `/exec` URL in
+`config.js` is unchanged and still responds.
 
 Open:
 1. **No order has been verified end to end.** The maintainer never confirmed the sandbox test
    before switching to Live. Watch the first real order: receipt shown → row in both Sheet
-   tabs with a PayPal Capture ID → board + parent emails. Never place a real order yourself.
-2. **Unconfirmed that the deployed Apps Script is current.** Commit `86694ab` added the PayPal
-   transaction ID to the parent email; the maintainer was given redeploy steps but hasn't
-   confirmed.
-3. **Turn off the Jotform** (`262537613078158`) once live PayPal works, so orders don't split.
+   tabs with a PayPal Capture ID → board email → parent email that includes the PayPal
+   transaction ID (that last part is also the only outside proof the new script version is
+   running). Never place a real order yourself.
+2. **Turn off the Jotform** (`262537613078158`) once live PayPal works, so orders don't split.
    The PTSA page still links "Purchase Music Sweatshirt" to the `4BRA2293PWVWL` PayPal
    checkout, which bypasses the form (no student, grade, or size captured). The PTSA site
    isn't ours to edit; flag it to the maintainer.
-4. Optional: menu says **Donate**, but the hero button, section heading, and footer link still
+3. Optional: menu says **Donate**, but the hero button, section heading, and footer link still
    say "Support Our Students" (the maintainer hasn't decided).
-5. Optional: favicon is still the old red ♪ data-URI square in both pages' `<head>`; could use
+4. Optional: favicon is still the old red ♪ data-URI square in both pages' `<head>`; could use
    the Tyee Music logo.
