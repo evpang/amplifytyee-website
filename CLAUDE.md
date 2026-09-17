@@ -100,6 +100,11 @@ Page conventions:
 - The "Donate with PayPal" / "Donate with Zelle" buttons start with an inline Simple Icons SVG
   (`svg.btn-icon`, `fill="currentColor"`) so the logo is white like the button text. The brand
   colours (PayPal `#003087`, Zelle `#6D1ED4`) are too dark to read on the red `.btn-primary`.
+- The home page's "Buy a Music Hoodie" button uses the same `svg.btn-icon` pattern with the
+  Phosphor Icons **hoodie (fill)** icon (MIT, `viewBox="0 0 256 256"`). There is no hoodie
+  emoji: 🧥 (`&#129509;`) is a coat, which is why it was replaced there. Material Symbols'
+  "apparel" was rejected because it's a T-shirt. The hoodie page's "Spiritwear Fundraiser"
+  badge still uses 🧥.
 - **Menu highlight = where you are, and nothing else.** No menu item has permanent emphasis
   (a red "Buy a Hoodie" call-to-action button was reported as a bug because it looked like the
   current tab). The highlight is `.site-nav a[aria-current]`. `sweatshirts.html` sets it
