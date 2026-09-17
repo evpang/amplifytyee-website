@@ -70,6 +70,7 @@ Wording is plain HTML. A few things appear in more than one place, so change all
 |---|---|
 | **Top menu** (Home · Donate · Buy a Hoodie · Connect · Facebook · YouTube) | In **both** `index.html` and `sweatshirts.html`. Keep them identical. |
 | **Footer** | In **both** pages. |
+| **Links to the home page** | Write them as `./` and `./#support`, not `index.html#support`. Visitors arrive at `amplifytyee.org/`, and an `index.html` link makes the browser reload the page instead of scrolling. |
 | **Facebook link** `facebook.com/profile.php?id=61572966548657` | Top menu (both pages) and the "Follow us on Facebook" card title |
 | **YouTube link** `youtube.com/@AMPLIFYTyee` | Top menu (both pages) and the "Subscribe to our YouTube Channel" card title |
 | **Donate with PayPal** button | `index.html`, "PayPal or Zelle" card. Currently the PayPal donation campaign *Every Note Matters–Amplify the Music Fund 2026-27* (`paypal.com/donate?campaign_id=DJWLA42FHYME8`). |

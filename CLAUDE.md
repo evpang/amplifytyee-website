@@ -89,9 +89,14 @@ Page conventions:
   current tab). The highlight is `.site-nav a[aria-current]`. `sweatshirts.html` sets it
   statically on "Buy a Hoodie". On `index.html`, `assets/js/nav.js` moves it between Home
   (`"page"`), Donate and Connect (`"location"`) on scroll, on load/hash (arriving from the
-  hoodie page), and immediately on click (held until the scroll finishes). It works out which
-  links are same-page sections from their `href`, so adding a menu link to a new `<section id>`
-  needs no JS change.
+  hoodie page), and immediately on click (held until the scroll finishes). Home and the logo
+  scroll back to the top instead of reloading. It works out which links are same-page sections
+  from their `href`, so adding a menu link to a new `<section id>` needs no JS change.
+- **Link to the home page as `./` and `./#section`, never `index.html` / `index.html#section`**
+  (both pages: logo, menu, footer, receipt "Back" button). Visitors arrive at
+  `amplifytyee.org/`; a link to `index.html#support` is a different URL, so the browser did a
+  full page reload instead of scrolling. (The local preview server also serves `/`; opening the
+  HTML file directly via `file://` isn't supported.)
 - Header logo `assets/img/logo.png` is generated from `tyee-music-logo.jpg`: 192px, circular
   alpha mask. Pillow isn't installed here; it was made with PowerShell `System.Drawing`
   (`TextureBrush` + `FillEllipse`, anti-aliased).
@@ -164,6 +169,10 @@ bundle for `env:"production"` vs `env:"sandbox"`. The response is gzipped, so us
 - **Windows shell:** a bash heredoc containing non-ASCII characters (♪, curly quotes) failed
   to parse. Use the Write/Edit tools for files with Unicode. Git's LF→CRLF warnings are
   harmless (`core.autocrlf=true`).
+- **The browser preview pane is sometimes `document.hidden`.** Then `requestAnimationFrame`
+  never fires and timers are throttled, so rAF-based code looks broken in tests while working
+  for real visitors. Check `document.visibilityState` before trusting a failed interaction test,
+  and prefer plain event handlers over rAF for cheap work.
 - **User interrupts:** if told "stop", stop immediately and report exactly what was and wasn't
   changed. "Revert" was handled with `git revert` of the last pushed commit (non-destructive).
 

@@ -9,6 +9,10 @@
 
    Pages whose menu has no links to sections of that same page keep their
    static aria-current (e.g. "Buy a Hoodie" on sweatshirts.html).
+
+   Links to the home page are written as "./" and "./#support" (not
+   "index.html#support") so that a visitor on amplifytyee.org/ stays on the
+   same URL and the browser scrolls instead of reloading the page.
    ========================================================================== */
 (function () {
   "use strict";
@@ -86,12 +90,26 @@
     });
   });
 
-  var ticking = false;
+  // Home and the logo, clicked while already on the home page: scroll back to the top
+  // instead of reloading. Ctrl/Cmd/Shift/middle-click keep their usual new-tab behaviour.
+  Array.prototype.forEach.call(document.querySelectorAll(".site-header a[href]"), function (link) {
+    var url = new URL(link.getAttribute("href"), location.href);
+    if (!isThisPage(url) || url.hash) return;
+    link.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      if (location.hash) history.pushState(null, "", location.pathname + location.search);
+      setActive(home);
+      locked = true;
+      unlockSoon(700);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+
+  // update() is only a few getBoundingClientRect calls, so it runs directly on scroll.
   window.addEventListener("scroll", function () {
     if (locked) { unlockSoon(150); return; }   // wait until scrolling stops
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function () { ticking = false; update(); });
+    update();
   }, { passive: true });
   window.addEventListener("resize", update);
   window.addEventListener("hashchange", update);
