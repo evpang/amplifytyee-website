@@ -227,5 +227,6 @@ Open:
    The PTSA page still links "Purchase Music Sweatshirt" to the `4BRA2293PWVWL` PayPal
    checkout, which bypasses the form (no student, grade, or size captured). The PTSA site
    isn't ours to edit; flag it to the maintainer.
-3. Optional: menu says **Donate**, but the hero button, section heading, and footer link still
-   say "Support Our Students" (the maintainer hasn't decided).
+3. Optional: the menu and both footers say **Donate** (footers changed 2026-09-17), but the
+   home page's hero button and the `#donate` section heading still say "Support Our Students"
+   (the maintainer hasn't decided).

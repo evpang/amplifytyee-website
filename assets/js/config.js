@@ -56,7 +56,7 @@ window.AMPLIFY_CONFIG = {
     { name: "Youth L",  chest: "30–32”", height: "Under 58” (4’10”)" },
     { name: "Youth XL", chest: "32–35”", height: "~58–60” (4’10”–5’0”)" },
     { name: "Adult S",  chest: "35–37”", height: "5’0”–5’5”" },
-    { name: "Adult M",  chest: "38–40”", height: "5’6”–5’9”" },
+    { name: "Adult M",  chest: "38–40”", height: "5’5”–5’8”" },
     { name: "Adult L",  chest: "41–43”", height: "5’8”–6’0”" }
   ],
 
