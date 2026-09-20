@@ -63,6 +63,7 @@ items* at the bottom (with the date).
 | `assets/css/site.css` | Shared styles and design tokens (`:root` vars; brand red `--red: #b3202e`) |
 | `assets/css/store.css` | Order form styles (only loaded by `sweatshirts.html`) |
 | `assets/js/nav.js` | Home page only: moves the menu highlight between Home / Donate / Connect |
+| `flyerWithFBYoutube.html`, `donateFlyer.html` | Two self-contained one-page printable flyers (own inline <style>, US Letter). Same content, different QR band: Donate/Hoodie/Facebook/YouTube vs PayPal/Zelle/Hoodie. QR codes are pre-generated SVGs in `assets/img/qr-*.svg` |
 | `.claude/launch.json` | Preview server: `python -m http.server 4321` |
 
 Store behavior worth knowing:
@@ -118,6 +119,12 @@ Page conventions:
   `amplifytyee.org/`; a link to `index.html#donate` is a different URL, so the browser did a
   full page reload instead of scrolling. (The local preview server also serves `/`; opening the
   HTML file directly via `file://` isn't supported.)
+- Flyer QR codes (`assets/img/qr-donate.svg`, `qr-hoodie.svg`, `qr-facebook.svg`, `qr-youtube.svg`,
+  `qr-paypal.svg`, `qr-zelle.svg`)
+  were generated with the npm `qrcode` package in the scratchpad (never added to the repo) at
+  error-correction level Q, and each was verified by decoding it back with `jsqr`. Regenerate the
+  same way if a URL changes. Keep the printed flyer under ~10in tall so it survives browser
+  default print margins: measure by applying the print rules and reading the sheet height.
 - Header logo `assets/img/logo.png` is generated from `tyee-music-logo.jpg`: 192px, circular
   alpha mask. Pillow isn't installed here; it was made with PowerShell `System.Drawing`
   (`TextureBrush` + `FillEllipse`, anti-aliased). The browser-tab icons are made the same way:
@@ -205,7 +212,7 @@ bundle for `env:"production"` vs `env:"sandbox"`. The response is gzipped, so us
 - **User interrupts:** if told "stop", stop immediately and report exactly what was and wasn't
   changed. "Revert" was handled with `git revert` of the last pushed commit (non-destructive).
 
-## Current status and open items (as of 2026-09-16)
+## Current status and open items (as of 2026-09-20)
 
 Done and live: both pages, domain + HTTPS, Google Sheet recording, **PayPal checkout in Live
 mode** (Live Client ID verified as `production`, buttons render, no test notice), donate
@@ -216,6 +223,22 @@ cards.
 matches `apps-script/Code.gs` (latest change: commit `86694ab`, PayPal transaction ID in the
 parent email), republished as a new version of the same deployment. The `/exec` URL in
 `config.js` is unchanged and still responds.
+
+**Flyers.** Two printable one-page flyers (pushed 2026-09-20; served at /flyerWithFBYoutube.html
+and /donateFlyer.html), plus the QR SVGs
+`assets/img/qr-{donate,hoodie,facebook,youtube,paypal,zelle}.svg`. Both share the same layout:
+header, lede, Mission | Goals (two columns), "Ways To Support Our Students", a "Tyee Music
+Hoodies" card, an "Every Note Matters - Annual Donation Campaign" card (same `.hoodie` card
+layout, wallet SVG in brand red via `.card-icon`), the QR tiles, footer. They differ only in the
+QR band:
+- `flyerWithFBYoutube.html` - Donate / Buy a Hoodie / Facebook / YouTube, QR images 0.85in,
+  printed height 9.98in.
+- `donateFlyer.html` - Donate with PayPal / Donate with Zelle / Buy a Hoodie, QR images 1.15in
+  (the Zelle URL is a long base64 payload, 57x57 modules, so a small code would not scan),
+  printed height 10.28in.
+Both were measured on 2026-09-20 by applying the print rules and reading the sheet height;
+re-measure after any content change. Tightening already applied to fit the donation card: body
+`line-height` 1.36, logo 1.02in, smaller card padding.
 
 Open:
 1. **No order has been verified end to end.** The maintainer never confirmed the sandbox test

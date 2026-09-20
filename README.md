@@ -249,6 +249,8 @@ refund in PayPal.
 ```
 ├── index.html              Home page
 ├── sweatshirts.html        Hoodie order form
+├── flyerWithFBYoutube.html  Printable flyer: Donate, Hoodie, Facebook, YouTube QR codes
+├── donateFlyer.html        Printable flyer: PayPal, Zelle, Hoodie QR codes
 ├── CNAME                   Custom domain for GitHub Pages
 ├── .nojekyll               Tells GitHub Pages to serve files as-is
 ├── README.md               This file (for maintainers)
