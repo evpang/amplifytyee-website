@@ -437,7 +437,7 @@
     var opener = null;   // the link that opened the chart, to return focus to
 
     dialog.querySelector("tbody").innerHTML = SIZES.map(function (s) {
-      return "<tr><th scope=\"row\">" + esc(s.name) + "</th><td>" + esc(s.chest || "") +
+      return "<tr><th scope=\"row\">" + esc(s.name) + "</th><td>" + esc(s.waist || "") +
              "</td><td>" + esc(s.height || "") + "</td></tr>";
     }).join("");
 

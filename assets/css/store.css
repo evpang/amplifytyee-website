@@ -61,6 +61,8 @@
 .dialog-close:hover { background: var(--bg-alt); color: var(--ink); }
 .size-dialog-body { padding: 0 22px 22px; }
 .size-note { color: var(--muted); font-size: .92rem; margin: 0 0 12px; }
+.size-source { margin: 14px 0 0; }              /* the source link under the table */
+.size-source a { color: var(--red); }
 .size-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
 .size-table th, .size-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .size-table thead th {

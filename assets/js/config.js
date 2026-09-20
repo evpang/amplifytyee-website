@@ -47,17 +47,20 @@ window.AMPLIFY_CONFIG = {
      3) SIZES — shared by every color.
         "name"   is what parents pick in the size dropdown. It is also what goes
                  on the PayPal receipt and into the Sheet's Size column.
-        "chest" and "height" are shown only in the "Size chart" popup.
+        "waist" and "height" are shown only in the "Size chart" popup.
+        Waist measurements come from the SanMar size chart (SizeChart-PA-V3).
 
         For inches and feet use curly quotes ” and ’ (as below). A straight
         double quote " ends the text early and breaks the whole store.
      ---------------------------------------------------------------------- */
   SIZES: [
-    { name: "Youth L",  chest: "30–32”", height: "Under 58” (4’10”)" },
-    { name: "Youth XL", chest: "32–35”", height: "~58–60” (4’10”–5’0”)" },
-    { name: "Adult S",  chest: "35–37”", height: "5’0”–5’5”" },
-    { name: "Adult M",  chest: "38–40”", height: "5’5”–5’8”" },
-    { name: "Adult L",  chest: "41–43”", height: "5’8”–6’0”" }
+    { name: "Youth L",   waist: "27–28”", height: "Under 58” (4’10”)" },
+    { name: "Youth XL",  waist: "29–31”", height: "~58–60” (4’10”–5’0”)" },
+    { name: "Adult S",   waist: "31–32”", height: "5’0”–5’5”" },
+    { name: "Adult M",   waist: "32–34”", height: "5’5”–5’8”" },
+    { name: "Adult L",   waist: "35–37”", height: "5’8”–6’0”" },
+    { name: "Adult XL",  waist: "38–40”", height: "" },
+    { name: "Adult XXL", waist: "41–43”", height: "" }
   ],
 
   /* ----------------------------------------------------------------------
@@ -66,9 +69,9 @@ window.AMPLIFY_CONFIG = {
         assets/img/.
      ---------------------------------------------------------------------- */
   PRODUCTS: [
-    { id: "red",   name: "Red Sweatshirt",   price: 30.00, image: "assets/img/red.png"   },
-    { id: "white", name: "White Sweatshirt", price: 30.00, image: "assets/img/white.png" },
-    { id: "black", name: "Black Sweatshirt", price: 30.00, image: "assets/img/black.png" }
+    { id: "red",   name: "Red Sweatshirt",   price: 35.00, image: "assets/img/red.png"   },
+    { id: "white", name: "White Sweatshirt", price: 35.00, image: "assets/img/white.png" },
+    { id: "black", name: "Black Sweatshirt", price: 35.00, image: "assets/img/black.png" }
   ],
 
   /* Shown after a successful payment. */

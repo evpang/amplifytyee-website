@@ -17,7 +17,7 @@ items* at the bottom (with the date).
 - `index.html`: about, mission and goals, donations, social links. Original copy came from
   the PTSA page <https://tyeeptsa.org/Page/PROGRAM%20PAGES/Amplify%20Tyee>.
 - `sweatshirts.html`: hoodie order form that replaced a Jotform
-  (<https://form.jotform.com/262537613078158>): 3 colors at $30, qty 0–5, 5 sizes, student
+  (<https://form.jotform.com/262537613078158>): 3 colors at $35, qty 0–5, 5 sizes, student
   name/grade/elective, parent email, PayPal checkout, orders recorded to a Google Sheet.
 - Club contact / PayPal / Zelle / Google account: **amplifytyee@gmail.com**.
 
@@ -57,7 +57,7 @@ items* at the bottom (with the date).
 
 | File | Responsibility |
 |---|---|
-| `assets/js/config.js` | All store settings: `PAYPAL_CLIENT_ID`, `PAYPAL_SANDBOX`, `APPS_SCRIPT_URL`, `CONTACT_EMAIL`, `MAX_QTY`, `SIZES` (`name`, `chest`, `height`), `PRODUCTS`, `THANK_YOU` |
+| `assets/js/config.js` | All store settings: `PAYPAL_CLIENT_ID`, `PAYPAL_SANDBOX`, `APPS_SCRIPT_URL`, `CONTACT_EMAIL`, `MAX_QTY`, `SIZES` (`name`, `waist`, `height`), `PRODUCTS`, `THANK_YOU` |
 | `assets/js/order.js` | IIFE. Renders products from config, recomputes totals in integer cents, validates (size required only when that color's qty > 0), loads the PayPal JS SDK on demand, `onClick` → `actions.reject()` until valid, captures, POSTs the order to Apps Script, shows the receipt |
 | `apps-script/Code.gs` | `doPost` appends to **Orders** and **Line Items** tabs and emails the board and the parent (parent email includes the PayPal transaction ID). `doGet` = health check. `testOrder` = manual end-to-end test |
 | `assets/css/site.css` | Shared styles and design tokens (`:root` vars; brand red `--red: #b3202e`) |
@@ -76,7 +76,7 @@ Store behavior worth knowing:
 - Sizes: the dropdown shows only `SIZES[].name`. Each color's "Size" label has a
   "📏 Size chart" `button.size-chart-link` beside it (rendered by `renderProducts()` inside
   `.label-row`, sized so the Size and Quantity dropdowns stay level). All three open one native
-  `<dialog id="size-chart">` whose table rows are built from `SIZES` (name/chest/height), via a
+  `<dialog id="size-chart">` whose table rows are built from `SIZES` (name/waist/height), via a
   click listener on `#products`. Closes via ×, Esc (handled explicitly: the embedded test
   browser didn't close on Esc natively), or a backdrop click; focus returns to whichever link
   opened it. The dialog sits outside `<form>` so its buttons can't submit it.

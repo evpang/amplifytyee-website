@@ -209,15 +209,15 @@ function notify(order, summary) {
 function testOrder() {
   var fake = {
     firstName: "Test", lastName: "Student", grade: "7th Grade", elective: "Band",
-    parentEmail: BOARD_EMAIL, total: "60.00", currency: "USD",
+    parentEmail: BOARD_EMAIL, total: "70.00", currency: "USD",
     paypalOrderId: "TEST-ORDER", paypalCaptureId: "TEST-CAPTURE",
-    paypalStatus: "COMPLETED", paypalAmount: "60.00",
+    paypalStatus: "COMPLETED", paypalAmount: "70.00",
     payerName: "Test Payer", payerEmail: BOARD_EMAIL,
     items: [
       { product: "Red Sweatshirt", size: "Adult M", sizeShort: "Adult M",
-        quantity: 1, unitPrice: "30.00", lineTotal: "30.00" },
+        quantity: 1, unitPrice: "35.00", lineTotal: "35.00" },
       { product: "Black Sweatshirt", size: "Adult L", sizeShort: "Adult L",
-        quantity: 1, unitPrice: "30.00", lineTotal: "30.00" }
+        quantity: 1, unitPrice: "35.00", lineTotal: "35.00" }
     ]
   };
   var res = doPost({ postData: { contents: JSON.stringify(fake) } });
