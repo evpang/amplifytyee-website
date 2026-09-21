@@ -9,6 +9,7 @@
 }
 .store-hero h1 { margin-bottom: .35em; }
 .store-hero .lede { font-size: clamp(1.02rem, 2vw, 1.13rem); color: var(--ink-soft); max-width: 64ch; margin: 0; }
+.store-hero .deadline { color: var(--red); font-weight: 700; }   /* order deadline in the hero copy */
 
 .store-wrap { max-width: 800px; padding-block: clamp(28px, 5vw, 46px); }
 
