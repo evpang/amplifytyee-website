@@ -219,26 +219,29 @@ mode** (Live Client ID verified as `production`, buttons render, no test notice)
 buttons (PayPal campaign + Zelle), Tyee Music logo in header, Facebook/YouTube in menu and
 cards.
 
-**Apps Script is current.** The maintainer confirmed on 2026-09-16 that the deployed script
-matches `apps-script/Code.gs` (latest change: commit `86694ab`, PayPal transaction ID in the
-parent email), republished as a new version of the same deployment. The `/exec` URL in
-`config.js` is unchanged and still responds.
+**Apps Script is current.** The maintainer redeployed on 2026-09-20, so the deployed script
+matches `apps-script/Code.gs` as of that date (commit `86694ab` put the PayPal transaction ID in
+the parent email; `20495c0` and `6274369` only touch `testOrder`). Each republish is a new version
+of the *same* deployment, so the `/exec` URL in `config.js` is unchanged; the health check still
+returns `{"ok":true,"service":"Amplify Tyee order recorder"}` (last checked 2026-09-21).
 
 **Flyers.** Two printable one-page flyers (pushed 2026-09-20; served at /flyerWithFBYoutube.html
 and /donateFlyer.html), plus the QR SVGs
-`assets/img/qr-{donate,hoodie,facebook,youtube,paypal,zelle}.svg`. Both share the same layout:
-header, lede, Mission | Goals (two columns), "Ways To Support Our Students", a "Tyee Music
-Hoodies" card, an "Every Note Matters - Annual Donation Campaign" card (same `.hoodie` card
-layout, wallet SVG in brand red via `.card-icon`), the QR tiles, footer. They differ only in the
-QR band:
+`assets/img/qr-{donate,hoodie,facebook,youtube,paypal,zelle}.svg`. Layout, top to bottom: header,
+lede, Mission | Goals (two columns), "Ways To Support Our Students", a "Tyee Music Hoodies" card,
+an "Every Note Matters - Annual Donation Campaign" card (same `.hoodie` card layout, wallet SVG in
+brand red via `.card-icon`), the QR tiles, footer. They differ in the QR band, and the donation
+card's wording has drifted apart too (the donate flyer has the checks bullet and "to double your
+impact"), so **content edits do not carry across - apply them to both files**:
 - `flyerWithFBYoutube.html` - Donate / Buy a Hoodie / Facebook / YouTube, QR images 0.85in,
   printed height 9.98in.
 - `donateFlyer.html` - Donate with PayPal / Donate with Zelle / Buy a Hoodie, QR images 1.15in
   (the Zelle URL is a long base64 payload, 57x57 modules, so a small code would not scan),
-  printed height 10.28in.
-Both were measured on 2026-09-20 by applying the print rules and reading the sheet height;
-re-measure after any content change. Tightening already applied to fit the donation card: body
-`line-height` 1.36, logo 1.02in, smaller card padding.
+  printed height 10.47in.
+Measured 2026-09-21 by applying the print rules and reading the sheet height; re-measure after any
+content change. Tightening already applied to fit the donation card: body `line-height` 1.36,
+logo 1.02in, smaller card padding. A longer hero lede pushed both past 10.5in once - if that comes
+back, the levers that worked were line-height 1.30, lede 13.5px, goals 13px, bullets 11.5px.
 
 Open:
 1. **No order has been verified end to end.** The maintainer never confirmed the sandbox test
