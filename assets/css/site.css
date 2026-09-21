@@ -220,3 +220,14 @@ p { margin: 0 0 1em; }
   .site-nav { justify-content: center; }
   .brand { justify-content: center; }
 }
+
+@media (min-width: 900px) {
+  /* Keep the hero compact on desktop: less padding, and a smaller, wider intro
+     (about 110 characters a line) so it sets in 5 lines instead of 7. This took
+     the hero from 579px to 406px at 1280 wide. Phones keep the roomier
+     stacked layout above. */
+  .hero { padding: 56px 0 44px; }
+  .hero h1 { margin-bottom: .3em; }
+  .hero p.lede { font-size: 1rem; line-height: 1.5; max-width: 790px; }
+  .hero-actions { margin-top: 20px; }
+}
