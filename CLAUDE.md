@@ -125,6 +125,16 @@ Page conventions:
   error-correction level Q, and each was verified by decoding it back with `jsqr`. Regenerate the
   same way if a URL changes. Keep the printed flyer under ~10in tall so it survives browser
   default print margins: measure by applying the print rules and reading the sheet height.
+- `assets/img/banner.png` (2400x750) is a fundraising banner: circle-masked logo on the left,
+  "AMPLIFY TYEE" in Impact (red `#A13A3D`) with a cream `#FCF0E2` outline, "Fundraising" in Segoe
+  Script Bold (navy `#314388`) overlapping the caps, a music-note call to action, and the hoodie
+  photo on the right. Styled after art the maintainer supplied; Impact and Segoe Script are the
+  nearest fonts installed here (the original used Anton and a Lobster-style script). Built with a
+  PowerShell `System.Drawing` script in the scratchpad (outlined text = `GraphicsPath.AddString`,
+  `DrawPath` with a cream pen, then `FillPath`). **No page links to it yet.** Two source-art
+  limits to know: `tyee-music-logo.jpg` sits on a black square, so it has to be masked into a
+  circle, and `red.png` has an opaque white backdrop, so the area behind the hoodie must stay
+  white.
 - Header logo `assets/img/logo.png` is generated from `tyee-music-logo.jpg`: 192px, circular
   alpha mask. Pillow isn't installed here; it was made with PowerShell `System.Drawing`
   (`TextureBrush` + `FillEllipse`, anti-aliased). The browser-tab icons are made the same way:
