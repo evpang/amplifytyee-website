@@ -105,7 +105,8 @@ Page conventions:
   Phosphor Icons **hoodie (fill)** icon (MIT, `viewBox="0 0 256 256"`). There is no hoodie
   emoji: 🧥 (`&#129509;`) is a coat, which is why it was replaced there. Material Symbols'
   "apparel" was rejected because it's a T-shirt. The hoodie page's "Spiritwear Fundraiser"
-  badge still uses 🧥.
+  badge carries the same icon as `svg.eyebrow-icon` (1.25em, sized for the smaller badge text);
+  copy the SVG from `index.html` rather than retyping it, so the two never drift.
 - **Menu highlight = where you are, and nothing else.** No menu item has permanent emphasis
   (a red "Buy a Hoodie" call-to-action button was reported as a bug because it looked like the
   current tab). The highlight is `.site-nav a[aria-current]`. `sweatshirts.html` sets it

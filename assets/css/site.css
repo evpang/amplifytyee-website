@@ -121,6 +121,9 @@ p { margin: 0 0 1em; }
 /* Logo inside a button (e.g. PayPal / Zelle on the donate buttons). Drawn in the button's text
    colour (fill="currentColor"), so it stays readable on the red buttons. */
 .btn-icon { width: 1.2em; height: 1.2em; flex: none; }
+/* Same inline icon inside an .eyebrow badge (the hoodie page uses the hoodie).
+   fill="currentColor" on the path makes it take the badge's red. */
+.eyebrow-icon { width: 1.25em; height: 1.25em; flex: none; margin-right: -2px; }
 .btn-primary { background: var(--red); color: #fff; box-shadow: 0 2px 10px rgba(179, 32, 46, .3); }
 .btn-primary:hover { background: var(--red-dark); color: #fff; }
 .btn-secondary { background: #fff; color: var(--ink); border-color: var(--line); box-shadow: var(--shadow); }
