@@ -1,15 +1,33 @@
 /* Amplify Tyee — order form styles (loaded only on sweatshirts.html) */
 
+/* The base tint matches the hoodie photo's own backdrop (#F8F3ED) so the picture
+   reads as part of the band rather than a pasted-on rectangle. */
 .store-hero {
   background:
-    radial-gradient(800px 380px at 15% -20%, rgba(179, 32, 46, .10), transparent 60%),
-    var(--bg-alt);
+    radial-gradient(800px 380px at 15% -20%, rgba(179, 32, 46, .08), transparent 60%),
+    #f8f3ed;
   border-bottom: 1px solid var(--line);
   padding: clamp(38px, 6vw, 62px) 0 clamp(30px, 4vw, 44px);
 }
 .store-hero h1 { margin-bottom: .35em; }
-.store-hero .lede { font-size: clamp(1.02rem, 2vw, 1.13rem); color: var(--ink-soft); max-width: 64ch; margin: 0; }
+/* max-width is in px, not ch: a ch is the digit width, which runs ~20% wide for
+   prose. 720px is about 100 characters a line at this size. */
+.store-hero .lede { font-size: clamp(1.02rem, 2vw, 1.13rem); color: var(--ink-soft); max-width: 720px; margin: 0; }
 .store-hero .deadline { color: var(--red); font-weight: 700; }   /* order deadline in the hero copy */
+
+/* Hero photo: the three hoodies stacked, bottom-aligned so it starts below the
+   headline. No card or shadow - the edges are feathered into the tint instead. */
+.store-hero-row { display: flex; align-items: flex-end; gap: clamp(12px, 1.6vw, 22px); }
+.store-hero-copy { flex: 1 1 380px; min-width: 0; }
+.store-hero-img {
+  flex: none; display: block; width: clamp(150px, 15vw, 192px); height: auto;
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 58%, transparent 100%);
+          mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 58%, transparent 100%);
+}
+@media (max-width: 760px) {
+  .store-hero-row { flex-direction: column; align-items: center; }
+  .store-hero-img { width: min(240px, 66%); }
+}
 
 .store-wrap { max-width: 800px; padding-block: clamp(28px, 5vw, 46px); }
 
