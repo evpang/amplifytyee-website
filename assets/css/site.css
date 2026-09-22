@@ -221,6 +221,13 @@ p { margin: 0 0 1em; }
   .brand { justify-content: center; }
 }
 
+/* Hero photo of the three ensembles. On phones it follows the copy; the desktop
+   rules below set it beside the text, on the right. */
+.hero-img {
+  display: block; width: 100%; height: auto; margin-top: 26px;
+  border-radius: var(--radius-lg); box-shadow: var(--shadow);
+}
+
 @media (min-width: 900px) {
   /* Keep the hero compact on desktop: less padding, and a smaller, wider intro
      (about 110 characters a line) so it sets in 5 lines instead of 7. This took
@@ -230,4 +237,9 @@ p { margin: 0 0 1em; }
   .hero h1 { margin-bottom: .3em; }
   .hero p.lede { font-size: 1rem; line-height: 1.5; max-width: 790px; }
   .hero-actions { margin-top: 20px; }
+
+  /* Words left, photo right - the same arrangement as the hoodie page. */
+  .hero-row { display: flex; align-items: center; gap: clamp(24px, 3vw, 44px); }
+  .hero-copy { flex: 1 1 auto; min-width: 0; }
+  .hero-img { flex: 0 0 auto; width: clamp(330px, 38vw, 480px); margin-top: 0; }
 }

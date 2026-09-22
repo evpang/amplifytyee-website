@@ -10,9 +10,9 @@
   padding: clamp(38px, 6vw, 62px) 0 clamp(30px, 4vw, 44px);
 }
 .store-hero h1 { margin-bottom: .35em; }
-/* max-width is in px, not ch: a ch is the digit width, which runs ~20% wide for
-   prose. 720px is about 100 characters a line at this size. */
-.store-hero .lede { font-size: clamp(1.02rem, 2vw, 1.13rem); color: var(--ink-soft); max-width: 720px; margin: 0; }
+/* No width cap: the copy runs to the photo, so there is no dead space between
+   the two. The wrap (1080px) minus the photo is what bounds the line length. */
+.store-hero .lede { font-size: clamp(1.02rem, 2vw, 1.13rem); color: var(--ink-soft); margin: 0; }
 .store-hero .deadline { color: var(--red); font-weight: 700; }   /* order deadline in the hero copy */
 
 /* Hero photo: the three hoodies stacked, bottom-aligned so it starts below the
