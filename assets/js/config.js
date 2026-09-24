@@ -54,9 +54,9 @@ window.AMPLIFY_CONFIG = {
         double quote " ends the text early and breaks the whole store.
      ---------------------------------------------------------------------- */
   SIZES: [
-    { name: "Youth L",   waist: "27–28”", height: "Under 58” (4’10”)" },
-    { name: "Youth XL",  waist: "29–31”", height: "~58–60” (4’10”–5’0”)" },
-    { name: "Adult S",   waist: "31–32”", height: "5’0”–5’5”" },
+    { name: "Youth L",   waist: "25–26”", height: "Under 58” (4’10”)" },
+    { name: "Youth XL",  waist: "27–28”", height: "~58–60” (4’10”–5’0”)" },
+    { name: "Adult S",   waist: "29–31”", height: "5’0”–5’5”" },
     { name: "Adult M",   waist: "32–34”", height: "5’5”–5’8”" },
     { name: "Adult L",   waist: "35–37”", height: "5’8”–6’0”" },
     { name: "Adult XL",  waist: "38–40”", height: "" },
