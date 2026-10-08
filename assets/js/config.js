@@ -71,7 +71,8 @@ window.AMPLIFY_CONFIG = {
   PRODUCTS: [
     { id: "red",   name: "Red Sweatshirt",   price: 35.00, image: "assets/img/red.png"   },
     { id: "white", name: "White Sweatshirt", price: 35.00, image: "assets/img/white.png" },
-    { id: "black", name: "Black Sweatshirt", price: 35.00, image: "assets/img/black.png" }
+    { id: "black", name: "Black Sweatshirt", price: 35.00, image: "assets/img/black.png" },
+    { id: "grey",  name: "Grey Sweatshirt",  price: 35.00, image: "assets/img/grey.png"  }
   ],
 
   /* Shown after a successful payment. */

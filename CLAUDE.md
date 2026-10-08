@@ -17,7 +17,7 @@ items* at the bottom (with the date).
 - `index.html`: about, mission and goals, donations, social links. Original copy came from
   the PTSA page <https://tyeeptsa.org/Page/PROGRAM%20PAGES/Amplify%20Tyee>.
 - `sweatshirts.html`: hoodie order form that replaced a Jotform
-  (<https://form.jotform.com/262537613078158>): 3 colors at $35, qty 0–5, 5 sizes, student
+  (<https://form.jotform.com/262537613078158>): 4 colors at $35, qty 0–5, 7 sizes, student
   name/grade/elective, parent email, PayPal checkout, orders recorded to a Google Sheet.
 - Club contact / PayPal / Zelle / Google account: **amplifytyee@gmail.com**.
 
