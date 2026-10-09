@@ -88,6 +88,12 @@ Store behavior worth knowing:
 - `config.js` strings: a straight `"` inside a label (e.g. `58"`) breaks the file and the whole
   store (no products, no PayPal). The maintainer did this once by hand. After any edit, run
   the config-parses check below; use curly `”` `’`.
+- After a paid order the receipt stays up for `AFTER_ORDER_DELAY` seconds (config.js) with a
+  countdown and a "Go now" link, then `order.js` sends the parent to `AFTER_ORDER_URL`
+  (`thank-you.html`). Set the URL to `""` to keep them on the receipt. **One exception:** when the
+  order did not reach the Sheet, there is no auto-redirect, only a link - that receipt carries the
+  "forward your PayPal receipt" instruction and must not be navigated away from. The receipt's old
+  "Back to Amplify Tyee" button was removed, so the countdown line is the way onward.
 - Known, accepted trade-off: the total is computed client-side. The Sheet stores PayPal Capture
   ID and PayPal Amount for reconciliation. Rows with no Capture ID are not real payments.
 

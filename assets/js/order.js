@@ -287,6 +287,43 @@
     successEl.hidden = false;
     successEl.focus();
     successEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    sendOnward(recorded);
+  }
+
+  /* After a paid order, move the parent to the thank-you page. The receipt is
+     shown first so they can note the confirmation ID. When the order did not
+     reach the Sheet we never navigate away on our own: that receipt carries the
+     "forward your PayPal receipt" instruction. */
+  function sendOnward(recorded) {
+    var next = String(CFG.AFTER_ORDER_URL || "").trim();
+    if (!next) return;
+
+    var note = document.createElement("p");
+    note.className = "receipt-note";
+
+    if (!recorded) {
+      note.innerHTML = '<a href="' + esc(next) + '">Continue to our thank-you page &rarr;</a>';
+      successEl.appendChild(note);
+      return;
+    }
+
+    var secs = Number(CFG.AFTER_ORDER_DELAY);
+    if (!isFinite(secs) || secs < 1) secs = 8;
+
+    note.innerHTML = 'Taking you to our thank-you page in <strong class="count">' + secs +
+                     '</strong> seconds. <a href="' + esc(next) + '">Go now</a>';
+    successEl.appendChild(note);
+
+    var count = note.querySelector(".count");
+    var timer = setInterval(function () {
+      secs -= 1;
+      count.textContent = secs > 0 ? secs : 0;
+      if (secs <= 0) {
+        clearInterval(timer);
+        window.location.href = next;
+      }
+    }, 1000);
   }
 
   /* --------------------------------------------------------------- PayPal */

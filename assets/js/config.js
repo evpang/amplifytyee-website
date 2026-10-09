@@ -44,6 +44,16 @@ window.AMPLIFY_CONFIG = {
   MAX_QTY: 5,
 
   /* ----------------------------------------------------------------------
+     Where to send parents after a paid order, and how long the receipt
+     stays on screen first. Set AFTER_ORDER_URL to "" to keep them on the
+     receipt instead. If the order could not be logged to the Sheet, the
+     receipt stays put (so the parent sees the "forward your receipt" note)
+     and the thank-you page becomes a link they can choose.
+     ---------------------------------------------------------------------- */
+  AFTER_ORDER_URL: "thank-you.html",
+  AFTER_ORDER_DELAY: 8,
+
+  /* ----------------------------------------------------------------------
      3) SIZES — shared by every color.
         "name"   is what parents pick in the size dropdown. It is also what goes
                  on the PayPal receipt and into the Sheet's Size column.
