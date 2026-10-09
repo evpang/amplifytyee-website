@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thank You — Amplify Tyee</title>
+<!-- Unlisted page: no link from the menus and no indexing. Share the URL directly. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#b3202e">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/img/favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/logo.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+/* Page-only styles. Everything else comes from site.css. */
+
+.thanks-hero { text-align: center; }
+.thanks-hero .eyebrow { margin-inline: auto; }
+.thanks-hero .lede { margin-inline: auto; }
+
+.check-badge {
+  width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%;
+  background: var(--green); color: #fff; display: grid; place-items: center;
+  font-size: 34px; font-weight: 700; box-shadow: var(--shadow);
+}
+
+/* Donate panel ----------------------------------------------------------- */
+.give {
+  border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff;
+  box-shadow: var(--shadow); padding: clamp(22px, 4vw, 34px); margin-top: 8px;
+}
+.give h2 { margin-bottom: .35em; }
+.give .amount { color: var(--red); font-weight: 800; }
+.give-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 0; }
+.give-note { font-size: .93rem; color: var(--muted); margin: 18px 0 0; }
+
+/* Videos ----------------------------------------------------------------- */
+.videos { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+.video figure { margin: 0; }
+.video .frame {
+  position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius);
+  overflow: hidden; background: #000; box-shadow: var(--shadow);
+}
+.video .frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.video figcaption { margin-top: 10px; font-weight: 650; }
+
+/* Shown in a slot that has no video link yet. */
+.video .frame.is-empty {
+  background: var(--bg-alt); border: 2px dashed #ccccd8; box-shadow: none;
+  display: grid; place-items: center; text-align: center; padding: 18px;
+  color: var(--muted); font-size: .92rem;
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./">
+      <img class="brand-logo" src="assets/img/logo.png" alt="" width="52" height="52">
+      <span>
+        <span class="brand-name">Amplify Tyee</span>
+        <span class="brand-sub">Music Booster Club</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="./#donate">Donate</a>
+      <a href="sweatshirts.html">Buy a Hoodie</a>
+      <a href="./#connect">Connect</a>
+      <a class="nav-icon" href="https://www.facebook.com/profile.php?id=61572966548657" target="_blank" rel="noopener" aria-label="Amplify Tyee on Facebook (opens in a new tab)" title="Amplify Tyee on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#0866FF" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a>
+      <a class="nav-icon" href="https://www.youtube.com/@AMPLIFYTyee" target="_blank" rel="noopener" aria-label="Amplify Tyee on YouTube (opens in a new tab)" title="Amplify Tyee on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- Thank you ---------------------------------------------------------- -->
+  <section class="hero thanks-hero">
+    <div class="wrap">
+      <div class="check-badge" aria-hidden="true">&#10003;</div>
+      <h1>Thank You!</h1>
+      <p class="lede">
+        Thank you for your hoodie order and for supporting Amplify Tyee. Every purchase goes
+        straight back to the Tyee Music Department, and families like yours are the reason our
+        band, orchestra, choir, and theater students have what they need to perform.
+      </p>
+      <p class="lede" style="margin-top:14px;">
+        Pre-ordered hoodies are delivered to students in class, about a month after the order
+        window closes.
+      </p>
+    </div>
+  </section>
+
+  <!-- Donate ------------------------------------------------------------- -->
+  <section class="section" id="donate">
+    <div class="wrap">
+      <div class="give">
+        <span class="eyebrow">&#128150; Every Note Matters</span>
+        <h2>Haven&rsquo;t donated yet? There&rsquo;s still time</h2>
+        <p>
+          Hoodie sales cover a slice of what the music program needs. Our annual
+          <strong>Every Note Matters</strong> campaign covers the rest. Our projected expense for
+          this year is <span class="amount">$20,000</span>, which includes a grant of $5,000 to
+          each music director, totaling $15,000. Directors have used their grants to replace worn out instruments,
+          purchase choir stoles, theatre play scripts, etc. The remaining $5,000 covers event transportation
+          subsidies, teacher training, guest lecturers, fundraising expenses, and adminstration fees.
+          We have raised about <span class="amount">$1,000</span> so far, so we need your help to
+          reach our goal. Suggested donation is <strong>$100 per student</strong>, but any amount
+          is welcomed.
+        </p>
+        <p>
+          Donations are tax-deductible, and many employers match them &mdash; which doubles
+          your impact.
+        </p>
+
+        <div class="give-actions">
+          <a class="btn btn-primary" href="https://www.paypal.com/donate?campaign_id=DJWLA42FHYME8"
+             target="_blank" rel="noopener"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7.016 19.198h-4.2a.562.562 0 0 1-.555-.65L5.093.584A.692.692 0 0 1 5.776 0h7.222c3.417 0 5.904 2.488 5.846 5.5-.006.25-.027.5-.066.747A6.794 6.794 0 0 1 12.071 12H8.743a.69.69 0 0 0-.682.583l-.325 2.056-.013.083-.692 4.39-.015.087zM19.79 6.142c-.01.087-.01.175-.023.261a7.76 7.76 0 0 1-7.695 6.598H9.007l-.283 1.795-.013.083-.692 4.39-.134.843-.014.088H6.86l-.497 3.15a.562.562 0 0 0 .555.65h3.612c.34 0 .63-.249.683-.585l.952-6.031a.692.692 0 0 1 .683-.584h2.126a6.793 6.793 0 0 0 6.707-5.752c.306-1.95-.466-3.744-1.89-4.906z"/></svg>Donate with PayPal</a>
+          <a class="btn btn-primary" href="https://enroll.zellepay.com/qr-codes?data=eyJuYW1lIjoiQU1QTElGWSBUWUVFIiwiYWN0aW9uIjoicGF5bWVudCIsInRva2VuIjoiYW1wbGlmeXR5ZWVAZ21haWwuY29tIn0="
+             target="_blank" rel="noopener"><svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M13.559 24h-2.841a.483.483 0 0 1-.483-.483v-2.765H5.638a.667.667 0 0 1-.666-.666v-2.234a.67.67 0 0 1 .142-.412l8.139-10.382h-7.25a.667.667 0 0 1-.667-.667V3.914c0-.367.299-.666.666-.666h4.23V.483c0-.266.217-.483.483-.483h2.841c.266 0 .483.217.483.483v2.765h4.323c.367 0 .666.299.666.666v2.137a.67.67 0 0 1-.141.41l-8.19 10.481h7.665c.367 0 .666.299.666.666v2.477a.667.667 0 0 1-.666.667h-4.32v2.765a.483.483 0 0 1-.483.483Z"/></svg>Donate with Zelle</a>
+        </div>
+
+        <p class="give-note">
+          Zelle and PayPal both reach us at <a href="mailto:amplifytyee@gmail.com">amplifytyee@gmail.com</a>.
+          Checks can be made payable to &ldquo;Amplify Tyee&rdquo; and sent to the school or handed to a
+          board member. Questions? Just email us.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Videos ------------------------------------------------------------- -->
+  <section class="section section-alt" id="watch">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>&#127909; Watch Our Students</h2>
+        <p>A few moments from the band, orchestra, and choir.</p>
+      </div>
+      <div class="videos" id="videos"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Amplify Tyee</h4>
+        <p style="margin:0;">Advancing Music Programs, Learning, and Inspiration for Youth.
+           Supporting band, orchestra, choir, and theater at Tyee Middle School.</p>
+      </div>
+      <div>
+        <h4>Pages</h4>
+        <ul>
+          <li><a href="./">Home</a></li>
+          <li><a href="sweatshirts.html">Buy a Music Hoodie</a></li>
+          <li><a href="./#donate">Donate</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:amplifytyee@gmail.com">amplifytyee@gmail.com</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61572966548657" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="https://www.youtube.com/@AMPLIFYTyee" target="_blank" rel="noopener">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      &copy; <span id="year">2026</span> Amplify Tyee &middot; A nonprofit booster club supporting the Tyee Middle School music department.
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ==========================================================================
+   THE THREE VIDEO SLOTS - this is the only part you need to edit.
+
+   Paste the YouTube video ID between the quotes. The ID is the part after
+   "v=" in a watch link, or after the last "/" in a youtu.be link:
+
+     https://www.youtube.com/watch?v=dQw4w9WgXcQ   ->  "dQw4w9WgXcQ"
+     https://youtu.be/dQw4w9WgXcQ                  ->  "dQw4w9WgXcQ"
+
+   A full link works too - the code pulls the ID out of it. Leave the id as ""
+   and that slot shows a placeholder box instead.
+   ========================================================================== */
+var VIDEOS = [
+  { title: "Band",      id: "8FybzWEUt8Y" },
+  { title: "Orchestra", id: "j1F6Fw2o8Eo" },
+  { title: "Choir",     id: "Y-ciS48cJEo" }
+];
+
+(function () {
+  // Accept a bare ID or any normal YouTube link.
+  function videoId(value) {
+    var v = String(value || "").trim();
+    if (!v) return "";
+    var m = v.match(/[?&]v=([\w-]{6,})/) ||
+            v.match(/youtu\.be\/([\w-]{6,})/) ||
+            v.match(/\/embed\/([\w-]{6,})/) ||
+            v.match(/\/shorts\/([\w-]{6,})/);
+    return m ? m[1] : v;
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  document.getElementById("videos").innerHTML = VIDEOS.map(function (v, i) {
+    var id = videoId(v.id);
+    var title = esc(v.title || "Video " + (i + 1));
+    var frame = id
+      ? '<div class="frame"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(id) + '"' +
+        ' title="' + title + '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"' +
+        ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"' +
+        ' allowfullscreen></iframe></div>'
+      : '<div class="frame is-empty"><span>Video ' + (i + 1) + ' goes here<br>(add the YouTube link in thank-you.html)</span></div>';
+    return '<div class="video"><figure>' + frame +
+           '<figcaption>' + title + '</figcaption></figure></div>';
+  }).join("");
+})();
+</script>
+</body>
+</html>

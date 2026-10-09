@@ -64,6 +64,7 @@ items* at the bottom (with the date).
 | `assets/css/store.css` | Order form styles (only loaded by `sweatshirts.html`) |
 | `assets/js/nav.js` | Home page only: moves the menu highlight between Home / Donate / Connect |
 | `flyerWithFBYoutube.html`, `donateFlyer.html` | Two self-contained one-page printable flyers (own inline <style>, US Letter). Same content, different QR band: Donate/Hoodie/Facebook/YouTube vs PayPal/Zelle/Hoodie. QR codes are pre-generated SVGs in `assets/img/qr-*.svg` |
+| `thank-you.html` | Unlisted thank-you page for parents who ordered (`noindex, nofollow`, nothing links to it; share the URL). Thank-you hero, an "Every Note Matters" donate panel with the PayPal and Zelle buttons, and three YouTube slots. Shell comes from `site.css`; the page-only CSS sits in its own `<style>`. **The videos are the `VIDEOS` array at the bottom** - paste an ID or any YouTube link; an empty id shows a placeholder box. Embeds use `youtube-nocookie.com` and lazy-load. The PayPal donate page itself cannot be iframed (`X-Frame-Options: SAMEORIGIN`), so the buttons open PayPal in a new tab; a popup-on-page flow would need PayPal's Donate SDK and a `hosted_button_id` |
 | `.claude/launch.json` | Preview server: `python -m http.server 4321` |
 
 Store behavior worth knowing:
