@@ -19,6 +19,15 @@ window.AMPLIFY_CONFIG = {
 
      While this is "", the order form still displays but checkout is
      replaced with a friendly "ordering opens soon" message.
+
+     LIVE MODE: the ID below is the Live one, so checkout takes real money.
+     To test instead, paste the sandbox ID below and set PAYPAL_SANDBOX to
+     true - the store then shows a "Test mode" notice. Both IDs are safe to
+     keep here: a Client ID is public by design and cannot move money on its
+     own.
+
+       Live:    BAAHltazF3vq2h4QEZGwDIkLDOb-A5K-Lp_85FNCEJZemOhZD3VIREz5calvFV8lkoaANHZ0w9kPlIENPw
+       Sandbox: BAAjr9szStrjnm7Q989se5CZjvfqvMFZ-wdVTqXZu7FD2xVYhXlPJehgegC-acJmi2vcv-BD2_MLvwv5AQ
      ---------------------------------------------------------------------- */
   PAYPAL_CLIENT_ID: "BAAHltazF3vq2h4QEZGwDIkLDOb-A5K-Lp_85FNCEJZemOhZD3VIREz5calvFV8lkoaANHZ0w9kPlIENPw",
 
@@ -51,7 +60,7 @@ window.AMPLIFY_CONFIG = {
      and the thank-you page becomes a link they can choose.
      ---------------------------------------------------------------------- */
   AFTER_ORDER_URL: "thank-you.html",
-  AFTER_ORDER_DELAY: 8,
+  AFTER_ORDER_DELAY: 7,
 
   /* ----------------------------------------------------------------------
      3) SIZES — shared by every color.
