@@ -190,6 +190,8 @@ select:disabled { background-color: #f4f4f7; color: var(--muted); cursor: not-al
 .notice-info { border-color: #cfe0f5; background: #f2f7fd; color: #1c3d63; }
 .notice-info a, .notice-warn a { color: inherit; font-weight: 600; }
 .notice-warn { border-color: #f0dcae; background: #fdf8ec; color: #6b4e11; margin-top: 16px; }
+/* Shown in place of the whole form once the ordering window has closed. */
+.order-closed { margin: 0 0 8px; font-size: 1.02rem; line-height: 1.6; }
 
 .fine-print { font-size: .9rem; color: var(--muted); margin: 18px 0 0; }
 

@@ -337,6 +337,58 @@
     btnContainer.appendChild(d);
   }
 
+  /* ------------------------------------------------------- ordering window */
+
+  /* The deadline as a Date at the very end of that day, or null when no date
+     is set. Parsed by hand: new Date("2026-10-18") is UTC midnight, which is
+     the day before here. */
+  function closeMoment() {
+    var raw = String(CFG.SWEATSHIRT_ORDER_CLOSE_DATE || "").trim();
+    var m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return null;
+    return new Date(+m[1], +m[2] - 1, +m[3], 23, 59, 59, 999);
+  }
+
+  function deadlineText() {
+    var d = closeMoment();
+    if (!d) return "";
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  /* "" while ordering is open, otherwise why it is closed. */
+  function closedBecause() {
+    if (CFG.SWEATSHIRT_ORDERING_OPEN === false) return "closed";
+    var d = closeMoment();
+    if (d && new Date() > d) return "past";
+    return "";
+  }
+
+  /* Print the deadline anywhere the page asks for it. */
+  function showDeadline() {
+    var text = deadlineText();
+    if (!text) return;
+    var spots = document.querySelectorAll("[data-order-deadline]");
+    for (var i = 0; i < spots.length; i++) spots[i].textContent = text;
+  }
+
+  /* Ordering closed: the whole form goes away - student fields, hoodies,
+     payment - and a single notice sits directly under the hero instead. */
+  function showClosed(why) {
+    var when = deadlineText();
+    var note = document.createElement("div");
+    note.className = "notice notice-warn order-closed";
+    note.innerHTML =
+      "<strong>Ordering is closed" + (why === "past" && when ? " as of " + esc(when) : "") +
+      ".</strong> Thank you to everyone who ordered! Hoodies will be delivered to students in " +
+      "class once they arrive. If you missed the deadline, email " +
+      '<a href="mailto:' + esc(CFG.CONTACT_EMAIL) + '">' + esc(CFG.CONTACT_EMAIL) + "</a> " +
+      "and we will let you know whether we can still add your hoodie to the order.";
+
+    form.hidden = true;
+    var wrap = form.parentNode;              // .store-wrap, straight under the hero
+    wrap.insertBefore(note, wrap.firstChild);
+  }
+
   function loadPayPal() {
     var id = (CFG.PAYPAL_CLIENT_ID || "").trim();
     if (!id) {
@@ -527,5 +579,12 @@
   // The page never does a classic form submit; PayPal drives checkout.
   form.addEventListener("submit", function (e) { e.preventDefault(); validate(true); });
 
-  loadPayPal();
+  showDeadline();
+
+  var closed = closedBecause();
+  if (closed) {
+    showClosed(closed);                      // no products, no checkout
+  } else {
+    loadPayPal();
+  }
 })();

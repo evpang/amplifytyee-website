@@ -53,6 +53,26 @@ window.AMPLIFY_CONFIG = {
   MAX_QTY: 5,
 
   /* ----------------------------------------------------------------------
+     THE SWEATSHIRT ORDERING WINDOW
+
+     SWEATSHIRT_ORDERING_OPEN
+       false = ordering is off whatever the date says. Use it to close early,
+       or flip it back on to take a late order.
+
+     SWEATSHIRT_ORDER_CLOSE_DATE
+       the last day orders are taken, as YYYY-MM-DD. Ordering stops at the end
+       of that day, by the shopper's own clock. "" = no deadline, so the flag
+       above is the only thing that closes it.
+
+     Once ordering is closed the whole form disappears - student fields,
+     hoodies and payment - and a single notice sits under the hero pointing at
+     CONTACT_EMAIL. The deadline prints itself into the page wherever an
+     element carries data-order-deadline (the hero's "Pre-order by ..." line).
+     ---------------------------------------------------------------------- */
+  SWEATSHIRT_ORDERING_OPEN: true,
+  SWEATSHIRT_ORDER_CLOSE_DATE: "2026-10-18",
+
+  /* ----------------------------------------------------------------------
      Where to send parents after a paid order, and how long the receipt
      stays on screen first. Set AFTER_ORDER_URL to "" to keep them on the
      receipt instead. If the order could not be logged to the Sheet, the

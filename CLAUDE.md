@@ -88,6 +88,13 @@ Store behavior worth knowing:
 - `config.js` strings: a straight `"` inside a label (e.g. `58"`) breaks the file and the whole
   store (no products, no PayPal). The maintainer did this once by hand. After any edit, run
   the config-parses check below; use curly `”` `’`.
+- **The ordering window** lives in `config.js`: `SWEATSHIRT_ORDERING_OPEN` (false closes it whatever
+  the date says) and `SWEATSHIRT_ORDER_CLOSE_DATE` (`YYYY-MM-DD`, closes at the end of that day by
+  the shopper's clock; `""` = no deadline). Closed means `order.js` hides the whole `<form>` and
+  puts one `.order-closed` notice at the top of `.store-wrap`, directly under the hero - no student
+  fields, no hoodies, no PayPal. The date is parsed by hand because `new Date("2026-10-18")` is UTC
+  midnight, a day early in Seattle. Anything carrying `data-order-deadline` gets the formatted date
+  written into it, so the hero's "Pre-order by ..." line has one source of truth.
 - After a paid order the receipt stays up for `AFTER_ORDER_DELAY` seconds (config.js) with a
   countdown and a "Go now" link, then `order.js` sends the parent to `AFTER_ORDER_URL`
   (`thank-you.html`). Set the URL to `""` to keep them on the receipt. **One exception:** when the
