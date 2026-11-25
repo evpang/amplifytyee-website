@@ -7,7 +7,7 @@
     radial-gradient(800px 380px at 15% -20%, rgba(179, 32, 46, .08), transparent 60%),
     #f8f3ed;
   border-bottom: 1px solid var(--line);
-  padding: clamp(38px, 6vw, 62px) 0 clamp(30px, 4vw, 44px);
+  padding: clamp(20px, 2.6vw, 30px) 0 clamp(24px, 3vw, 34px);
 }
 .store-hero h1 { margin-bottom: .35em; }
 /* No width cap: the copy runs to the photo, so there is no dead space between
@@ -140,6 +140,44 @@ select:disabled { background-color: #f4f4f7; color: var(--muted); cursor: not-al
 .choice input { accent-color: var(--red); width: 17px; height: 17px; margin: 0; cursor: pointer; }
 .choice:has(input:checked) { border-color: var(--red); background: var(--red-soft); color: var(--red-dark); }
 .choice:has(input:focus-visible) { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* Optional "?" beside a legend, explaining how to answer. Shows on hover and
+   on keyboard focus, and taps open it too because the marker is focusable.
+   Used by the Level(Grade) question on every ordering page. */
+.help { position: relative; display: inline-flex; margin-left: 6px; vertical-align: middle; }
+.help-mark {
+  width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--red); color: #fff; font-size: .72rem; font-weight: 700; cursor: help;
+}
+.help-bubble {
+  position: absolute; left: 50%; bottom: calc(100% + 9px); transform: translateX(-50%);
+  width: max-content; max-width: 260px; padding: 9px 12px; border-radius: 10px;
+  background: var(--ink); color: #fff; font-size: .85rem; font-weight: 500; line-height: 1.45;
+  letter-spacing: 0; text-transform: none; text-align: left;
+  opacity: 0; visibility: hidden; transition: opacity .12s ease;
+  /* Above the sticky site header (z-index 100), which otherwise swallows the
+     bubble whenever the question sits near the top of the window. Still below
+     the skip link (200). */
+  z-index: 150;
+}
+.help-bubble::after {
+  content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--ink);
+}
+/* Narrow screens: a centred bubble hangs off the left edge, so anchor it to
+   the "?" and let it run rightwards, with the caret still over the marker. */
+@media (max-width: 560px) {
+  .help-bubble { left: -9px; transform: none;
+                 /* narrower than the gap to the right edge, so the last word
+                    can't be clipped wherever the marker happens to sit */
+                 max-width: min(230px, calc(100vw - 72px)); }
+  .help-bubble::after { left: 18px; }
+}
+.help:hover .help-bubble, .help:focus .help-bubble, .help:focus-within .help-bubble {
+  opacity: 1; visibility: visible;
+}
+.help:focus { outline: none; }
+.help:focus .help-mark { outline: 3px solid var(--red); outline-offset: 2px; }
 
 /* Products --------------------------------------------------------------- */
 .products { display: grid; gap: 16px; }

@@ -123,12 +123,59 @@ Orders go to a Google Sheet (e.g. *Hoodie Orders*) whose Apps Script project run
 [`apps-script/Code.gs`](apps-script/Code.gs). The Sheet itself is **not** in GitHub: it holds
 student names and parent emails, and this repository is public.
 
-**Orders tab columns:** Timestamp · First Name · Last Name · Grade · Elective · Parent Email ·
-Order Summary · Total · PayPal Order ID · PayPal Capture ID · PayPal Status · PayPal Amount ·
-Payer Name · Payer Email · Fulfilled?
+**Each ordering page writes to its own pair of tabs**, so hoodie orders and concert orders
+never mix:
 
-**Line Items tab columns:** Timestamp · First Name · Last Name · Grade · Elective · Product ·
-Size · Quantity · Line Total · PayPal Capture ID
+| Ordering page | Orders tab | Line items tab |
+|---|---|---|
+| `sweatshirts.html` | *Hoodie Order* | *Hoodie Line Items* |
+| `WinterConcert.html` | *Winter Concert Orders* | *Winter Concert Line Items* |
+
+The pairs are listed in `STORE_SHEETS` at the top of `Code.gs`, keyed by the store's `LABEL`
+in `assets/js/config.js`. A store that isn't listed there gets tabs named after itself
+(*&lt;Store&gt; Orders* / *&lt;Store&gt; Line Items*), so an order is never dropped. **A tab is
+created, with its bold frozen header row, the first time that store sells something** - there
+is nothing to set up by hand for a new store.
+
+**Orders tab columns (A-P):** Timestamp · First Name · Last Name · Elective · **Level** ·
+Parent Email · Order Summary · Total · PayPal Order ID · PayPal Capture ID · PayPal Status ·
+PayPal Amount · Payer Name · Payer Email · Fulfilled? · Store
+
+**Line Items tab columns (A-J):** Timestamp · First Name · Last Name · Elective · **Level** ·
+Product · Size · Quantity · Line Total · PayPal Capture ID
+
+The two orders tabs share one layout and the two line-items tabs share another, so a formula or
+pivot copies between tabs of the same kind. A line-items tab has **no *Store* column** - every
+row on it is from the same store; the orders tabs keep theirs. There is no *Grade* column either:
+both pages ask for **Level(Grade)**, and the level name carries the grade in brackets. Gift cards
+and combos have no *Size*.
+
+> **Rename the hoodie tabs first.** They are still called *Orders* and *Line Items*; the script
+> now writes to *Hoodie Order* and *Hoodie Line Items*. Rename them (double-click the tab name)
+> **before** the next order - otherwise the script creates two new empty tabs under those names
+> and the 2026 hoodie orders are left behind in the old ones.
+>
+> **One-off for the existing hoodie tabs.** The script only writes a header row into an *empty*
+> tab, and the column layout changed (no more *Grade*, a *Level* column beside *Elective*, and
+> *Store* at the end of the orders tab only), so the two tabs that already hold orders have to be
+> rearranged once by hand. Do this **before** the next order comes in, or that row will be a
+> column out of step.
+>
+> On *Hoodie Order*:
+>
+> 1. **Delete column D (*Grade*).** No page asks for a school grade any more - the level name
+>    carries it in brackets. To keep the 2026 grades, drag that column to the far right of the
+>    data instead of deleting it, and ignore it in the steps below.
+> 2. Right-click column **E** (*Parent Email*) -> **Insert 1 column left**, and put `Level` in `E1`.
+> 3. Type `Store` in `P1`.
+>
+> On *Hoodie Line Items*, two moves - there is no *Store* column here:
+>
+> 1. Delete column D (*Grade*).
+> 2. Insert 1 column left of **E** (*Product*), and put `Level` in `E1`.
+>
+> Read across row 1 afterwards to check: *Elective* and *Level* side by side; on the orders tab
+> *Store* is last, and the line-items tab ends at *PayPal Capture ID*.
 
 - **Tally the vendor order:** on *Line Items*, Insert → Pivot table; Rows = Product and Size,
   Values = SUM of Quantity.

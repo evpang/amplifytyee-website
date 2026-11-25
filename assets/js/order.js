@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Amplify Tyee — hoodie order form
+   Amplify Tyee — order form
    --------------------------------------------------------------------------
    Plain browser JavaScript. No build step, no dependencies except the
    PayPal SDK, which is loaded on demand only when a Client ID is configured.
@@ -7,16 +7,59 @@
    Flow:  fill form -> live total -> PayPal checkout -> capture payment
           -> record the order to Google Sheets -> show an on-screen receipt.
 
-   All setup values live in config.js. You should not need to edit this file.
+   This one script drives every ordering page. A page says which store it is
+   with <body data-store="sweatshirts">; the settings come from that block of
+   AMPLIFY_CONFIG.STORES, on top of ACCOUNT and DEFAULTS. Everything is in
+   config.js - you should not need to edit this file to add a store.
    ========================================================================== */
 (function () {
   "use strict";
 
-  var CFG = window.AMPLIFY_CONFIG || {};
+  var ALL = window.AMPLIFY_CONFIG || {};
+  var STORES = ALL.STORES || {};
+
+  /* Which store is this page? The <body data-store> attribute names it; with
+     only one store configured we use that one, so a page can skip the
+     attribute. An unknown name is worth shouting about: every order on the
+     page depends on it. */
+  function pickStore() {
+    var keys = Object.keys(STORES);
+    var named = (document.body && document.body.getAttribute("data-store") || "").trim();
+    if (named && STORES[named]) return STORES[named];
+    if (named) {
+      console.error('[Amplify Tyee] No store named "' + named + '" in config.js STORES.');
+      return null;
+    }
+    return keys.length === 1 ? STORES[keys[0]] : null;
+  }
+
+  var STORE = pickStore();
+  if (!STORE) return;
+
+  /* One flat object: the store's own settings win, then DEFAULTS, then the
+     account-wide ones. The rest of this file just reads CFG, as before. */
+  var CFG = {};
+  (function merge() {
+    var sources = [ALL, ALL.DEFAULTS || {}, STORE];
+    for (var i = 0; i < sources.length; i++) {
+      for (var k in sources[i]) {
+        if (Object.prototype.hasOwnProperty.call(sources[i], k)) CFG[k] = sources[i][k];
+      }
+    }
+    delete CFG.STORES;
+    delete CFG.DEFAULTS;
+  })();
+
   var CUR = CFG.CURRENCY || "USD";
   var MAX_QTY = CFG.MAX_QTY || 5;
-  var PRODUCTS = CFG.PRODUCTS || [];
+  /* available: false takes an item off sale. It never reaches the page, so
+     nothing can select it, nothing can be paid for and no totals include it.
+     Leave the entry in config.js and flip the flag back when it returns.
+     An item with no "available" key is on sale, so older stores need no edit. */
+  var PRODUCTS = (CFG.PRODUCTS || []).filter(function (p) { return p.available !== false; });
   var SIZES = CFG.SIZES || [];
+  var HAS_SIZES = SIZES.length > 0;          // gift cards and combos have none
+  var NOUN = CFG.ITEM_NOUN || "item";        // used in the "pick something" error
 
   var form = document.getElementById("order-form");
   if (!form) return;
@@ -31,6 +74,35 @@
   var successEl = document.getElementById("order-success");
 
   document.getElementById("delivery-note").textContent = CFG.THANK_YOU || "";
+
+  /* The form's radio groups (grade, elective, level, ...) are read off the
+     page rather than hard-coded, so each ordering page can ask what it needs.
+     Each group is a fieldset.choice-group whose radios share a name. */
+  function choiceGroups() {
+    var out = [];
+    var groups = form.querySelectorAll("fieldset.choice-group");
+    for (var i = 0; i < groups.length; i++) {
+      var radio = groups[i].querySelector('input[type="radio"]');
+      if (!radio || !radio.name) continue;
+      // The legend may hold a required marker and a help bubble; neither is part
+      // of the field's name. An explicit data-choice-label wins over both.
+      var label = groups[i].getAttribute("data-choice-label") || "";
+      var legend = groups[i].querySelector("legend");
+      if (!label && legend) {
+        var copy = legend.cloneNode(true);
+        var drop = copy.querySelectorAll(".help, [aria-hidden='true']");
+        for (var d = 0; d < drop.length; d++) drop[d].parentNode.removeChild(drop[d]);
+        label = copy.textContent.replace(/[:*]/g, "").trim();
+      }
+      if (!label) label = radio.name;
+      out.push({ name: radio.name, label: label });
+    }
+    return out;
+  }
+
+  function choiceValue(name) {
+    return (form.querySelector('input[name="' + name + '"]:checked') || {}).value || "";
+  }
 
   /* ---------------------------------------------------------------- utils */
 
@@ -70,6 +142,7 @@
                 '<label for="qty-' + esc(p.id) + '">Quantity</label>' +
                 '<select id="qty-' + esc(p.id) + '" class="qty" data-qty="' + esc(p.id) + '">' + qtyOpts + "</select>" +
               "</div>" +
+              (HAS_SIZES ?
               '<div class="field field-grow">' +
                 '<div class="label-row">' +
                   '<label for="size-' + esc(p.id) + '">Size</label>' +
@@ -80,7 +153,7 @@
                   '<option value="">Select a size…</option>' + sizeOpts +
                 "</select>" +
                 '<p class="err" data-err-for="size-' + esc(p.id) + '" hidden></p>' +
-              "</div>" +
+              "</div>" : "") +
             "</div>" +
           "</div>" +
         "</div>"
@@ -96,7 +169,8 @@
     PRODUCTS.forEach(function (p) {
       var qty = parseInt(document.querySelector('[data-qty="' + p.id + '"]').value, 10) || 0;
       if (qty <= 0) return;
-      var sizeIdx = document.querySelector('[data-size="' + p.id + '"]').value;
+      var sizeSel = document.querySelector('[data-size="' + p.id + '"]');
+      var sizeIdx = sizeSel ? sizeSel.value : "";
       var size = sizeIdx === "" ? null : SIZES[Number(sizeIdx)];
       lines.push({
         id: p.id,
@@ -121,8 +195,9 @@
       var qtySel = document.querySelector('[data-qty="' + p.id + '"]');
       var sizeSel = document.querySelector('[data-size="' + p.id + '"]');
       var active = (parseInt(qtySel.value, 10) || 0) > 0;
+      qtySel.closest(".product").classList.toggle("is-selected", active);
+      if (!sizeSel) return;
       sizeSel.disabled = !active;
-      sizeSel.closest(".product").classList.toggle("is-selected", active);
       if (!active) {
         sizeSel.value = "";
         hideErr("size-" + p.id);
@@ -144,7 +219,7 @@
             "</li>"
           );
         }).join("")
-      : '<li class="summary-empty"><span>No hoodies selected yet</span><span></span></li>';
+      : '<li class="summary-empty"><span>Nothing selected yet</span><span></span></li>';
 
     totalEl.textContent = money(cents);
     return cents;
@@ -185,8 +260,9 @@
       }
     });
 
-    if (!form.querySelector('input[name="grade"]:checked')) fail("grade", "Please select a grade.");
-    if (!form.querySelector('input[name="elective"]:checked')) fail("elective", "Please select an elective.");
+    choiceGroups().forEach(function (g) {
+      if (!choiceValue(g.name)) fail(g.name, "Please select " + (/^[aeiou]/i.test(g.label) ? "an " : "a ") + g.label.toLowerCase() + ".");
+    });
 
     var email = document.getElementById("parentEmail").value.trim();
     if (!email) fail("parentEmail", "Please enter a parent email address.");
@@ -194,7 +270,7 @@
 
     var lines = getLines();
     if (!lines.length) {
-      fail("products", "Please choose a quantity for at least one hoodie.");
+      fail("products", "Please choose a quantity for at least one " + NOUN + ".");
     } else {
       lines.forEach(function (l) {
         if (!l.sizeShort) fail("size-" + l.id, "Please choose a size for the " + l.name.toLowerCase() + ".");
@@ -212,17 +288,22 @@
 
   function buildOrder() {
     var lines = getLines();
-    return {
+    var order = {
+      // Which ordering page this came from, so the Sheet and the board email
+      // can tell the stores apart.
+      store: CFG.LABEL || "",
+      // How this store's goods reach the student. The parent's confirmation
+      // email prints it, so hoodies say "delivered in class" and the winter
+      // concert says "ready for pickup at the concert".
+      thankYou: CFG.THANK_YOU || "",
       firstName: document.getElementById("firstName").value.trim(),
       lastName: document.getElementById("lastName").value.trim(),
-      grade: (form.querySelector('input[name="grade"]:checked') || {}).value || "",
-      elective: (form.querySelector('input[name="elective"]:checked') || {}).value || "",
       parentEmail: document.getElementById("parentEmail").value.trim(),
       items: lines.map(function (l) {
         // Code.gs writes "size" to the Sheet and uses "sizeShort" in emails; both are the
         // size name (e.g. "Adult M"). Keep both keys so the deployed script needs no change.
         return {
-          product: l.name, size: l.sizeShort, sizeShort: l.sizeShort,
+          product: l.name, size: l.sizeShort || "", sizeShort: l.sizeShort || "",
           quantity: l.qty, unitPrice: (l.unitCents / 100).toFixed(2),
           lineTotal: (l.unitCents * l.qty / 100).toFixed(2)
         };
@@ -231,6 +312,10 @@
       currency: CUR,
       pageUrl: location.href
     };
+
+    // grade / elective / level ... exactly as this page asked for them.
+    choiceGroups().forEach(function (g) { order[g.name] = choiceValue(g.name); });
+    return order;
   }
 
   /* ------------------------------------------------- record to the sheet */
@@ -263,9 +348,14 @@
     document.getElementById("receipt-thanks").textContent = CFG.THANK_YOU || "";
 
     var rows = order.items.map(function (i) {
-      return "<li><span>" + esc(i.product) + ' <em class="sz">' + esc(i.sizeShort) +
-             '</em> <span class="qx">&times;' + i.quantity + "</span></span><span>$" +
+      return "<li><span>" + esc(i.product) +
+             (i.sizeShort ? ' <em class="sz">' + esc(i.sizeShort) + "</em>" : "") +
+             ' <span class="qx">&times;' + i.quantity + "</span></span><span>$" +
              esc(i.lineTotal) + "</span></li>";
+    }).join("");
+
+    var details = choiceGroups().map(function (g) {
+      return "<dt>" + esc(g.label) + "</dt><dd>" + esc(order[g.name] || "") + "</dd>";
     }).join("");
 
     document.getElementById("receipt-body").innerHTML =
@@ -273,15 +363,14 @@
       '<div class="summary-total"><span>Total paid</span><strong>$' + esc(order.total) + "</strong></div>" +
       '<dl class="receipt-meta">' +
         "<dt>Student</dt><dd>" + esc(order.firstName + " " + order.lastName) + "</dd>" +
-        "<dt>Grade</dt><dd>" + esc(order.grade) + "</dd>" +
-        "<dt>Elective</dt><dd>" + esc(order.elective) + "</dd>" +
+        details +
         "<dt>Confirmation</dt><dd><code>" + esc(captureId || "—") + "</code></dd>" +
       "</dl>" +
       (recorded ? "" :
         '<div class="notice notice-warn">We received your payment, but could not automatically ' +
         "log the order. Please forward your PayPal receipt to " +
         '<a href="mailto:' + esc(CFG.CONTACT_EMAIL) + '">' + esc(CFG.CONTACT_EMAIL) + "</a> so we can " +
-        "confirm your size.</div>");
+        "confirm your order.</div>");
 
     form.hidden = true;
     successEl.hidden = false;
@@ -343,7 +432,7 @@
      is set. Parsed by hand: new Date("2026-10-18") is UTC midnight, which is
      the day before here. */
   function closeMoment() {
-    var raw = String(CFG.SWEATSHIRT_ORDER_CLOSE_DATE || "").trim();
+    var raw = String(CFG.ORDER_CLOSE_DATE || "").trim();
     var m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (!m) return null;
     return new Date(+m[1], +m[2] - 1, +m[3], 23, 59, 59, 999);
@@ -357,9 +446,10 @@
 
   /* "" while ordering is open, otherwise why it is closed. */
   function closedBecause() {
-    if (CFG.SWEATSHIRT_ORDERING_OPEN === false) return "closed";
+    if (CFG.ORDERING_OPEN === false) return "closed";
     var d = closeMoment();
     if (d && new Date() > d) return "past";
+    if (!PRODUCTS.length) return "empty";     // every item switched off
     return "";
   }
 
@@ -375,14 +465,26 @@
      payment - and a single notice sits directly under the hero instead. */
   function showClosed(why) {
     var when = deadlineText();
+    var mail = '<a href="mailto:' + esc(CFG.CONTACT_EMAIL) + '">' + esc(CFG.CONTACT_EMAIL) + "</a>";
     var note = document.createElement("div");
     note.className = "notice notice-warn order-closed";
-    note.innerHTML =
-      "<strong>Ordering is closed" + (why === "past" && when ? " as of " + esc(when) : "") +
-      ".</strong> Thank you to everyone who ordered! Hoodies will be delivered to students in " +
-      "class once they arrive. If you missed the deadline, email " +
-      '<a href="mailto:' + esc(CFG.CONTACT_EMAIL) + '">' + esc(CFG.CONTACT_EMAIL) + "</a> " +
-      "and we will let you know whether we can still add your hoodie to the order.";
+
+    if (why === "empty") {
+      // Nothing is on sale: every item in this store has available: false.
+      note.innerHTML =
+        "<strong>Ordering is not open right now.</strong> There is nothing available to order " +
+        "on this page at the moment. Please check back soon, or email " + mail + " if you have " +
+        "a question.";
+    } else {
+      // CLOSED_NOTE is this store's own line for the closed page. THANK_YOU is
+      // not used here: it is written to a buyer who has just paid.
+      var note_line = CFG.CLOSED_NOTE ? " " + esc(CFG.CLOSED_NOTE) : "";
+      note.innerHTML =
+        "<strong>Ordering is closed" + (why === "past" && when ? " as of " + esc(when) : "") +
+        ".</strong> Thank you to everyone who ordered!" + note_line +
+        " If you missed the deadline, email " + mail +
+        " and we will let you know whether we can still take your order.";
+    }
 
     form.hidden = true;
     var wrap = form.parentNode;              // .store-wrap, straight under the hero
@@ -395,7 +497,7 @@
       payMessage(
         "<strong>Online ordering opens soon.</strong> To reserve a hoodie now, email " +
         '<a href="mailto:' + esc(CFG.CONTACT_EMAIL) + '">' + esc(CFG.CONTACT_EMAIL) + "</a> " +
-        "with your student's name, grade, elective, and the colors and sizes you'd like."
+        "with your student's details and what you'd like to order."
       );
       return;
     }
@@ -444,11 +546,13 @@
       createOrder: function (data, actions) {
         pendingOrder = buildOrder();
         var student = pendingOrder.firstName + " " + pendingOrder.lastName;
+        var about = choiceGroups().map(function (g) { return pendingOrder[g.name]; })
+                                  .filter(Boolean).join(" / ");
         return actions.order.create({
           intent: "CAPTURE",
           purchase_units: [{
-            description: ("Tyee Music Hoodie order — " + student).slice(0, 127),
-            custom_id: (pendingOrder.grade + " / " + pendingOrder.elective).slice(0, 127),
+            description: ((CFG.LABEL || "Amplify Tyee") + " order — " + student).slice(0, 127),
+            custom_id: about.slice(0, 127),
             amount: {
               currency_code: CUR,
               value: pendingOrder.total,
@@ -456,8 +560,8 @@
             },
             items: pendingOrder.items.map(function (i) {
               return {
-                name: (i.product + " — " + i.sizeShort).slice(0, 127),
-                description: ("For " + student + " (" + pendingOrder.grade + ", " + pendingOrder.elective + ")").slice(0, 127),
+                name: (i.sizeShort ? i.product + " — " + i.sizeShort : i.product).slice(0, 127),
+                description: ("For " + student + (about ? " (" + about + ")" : "")).slice(0, 127),
                 quantity: String(i.quantity),
                 unit_amount: { currency_code: CUR, value: i.unitPrice },
                 category: "PHYSICAL_GOODS"
@@ -562,12 +666,11 @@
 
   renderProducts();
   recompute();
-  setupSizeChart();
+  if (HAS_SIZES) setupSizeChart();
 
   form.addEventListener("change", function (e) {
     if (e.target.matches(".qty, .size")) recompute();
-    if (e.target.name === "grade") hideErr("grade");
-    if (e.target.name === "elective") hideErr("elective");
+    if (e.target.type === "radio" && e.target.name) hideErr(e.target.name);
     if (e.target.matches(".size") && e.target.value) hideErr("size-" + e.target.dataset.size);
     if (getLines().length) hideErr("products");
   });

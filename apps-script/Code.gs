@@ -1,29 +1,58 @@
 /* ==========================================================================
    Amplify Tyee — order recorder (Google Apps Script)
    --------------------------------------------------------------------------
-   Receives a paid hoodie order from amplifytyee.org and:
-     1. appends one row per order   -> "Orders" sheet
-     2. appends one row per size    -> "Line Items" sheet (for vendor counts)
+   Receives a paid order from any ordering page on amplifytyee.org and:
+     1. appends one row per order   -> that store's Orders sheet
+     2. appends one row per item    -> that store's Line Items sheet
      3. emails the board, and optionally the parent
+
+   Each store writes to its OWN pair of tabs, named in STORE_SHEETS below. A
+   tab is created with its header row the first time that store sells
+   something, so adding a store needs no setup in the spreadsheet.
 
    Free forever on a normal Gmail account. See README.md for setup.
    ========================================================================== */
 
 /* ------------------------------ settings ------------------------------- */
 
+/* Bump this whenever you paste a new copy into the Apps Script editor. The
+   health check prints it, so you can prove WHICH code the website is actually
+   calling:  curl -sL "<the /exec URL in config.js>"
+   If the version it prints is not the one in this file, the deployment the
+   site uses was not updated - most often because "Manage deployments ->
+   Edit -> New version" was run on a different deployment than the one whose
+   URL is in config.js. */
+var SCRIPT_VERSION = "2026-11-24g";
+
 var BOARD_EMAIL = "amplifytyee@gmail.com";   // who gets each order notification
 var SEND_PARENT_CONFIRMATION = true;         // also email the parent a copy
-var ORDERS_SHEET = "Orders";
-var ITEMS_SHEET  = "Line Items";
+/* Which pair of tabs each store writes to. The key is the store's LABEL in
+   assets/js/config.js — change one and you must change the other. A store
+   that is missing here gets tabs named after itself ("<Store> Orders" and
+   "<Store> Line Items"), so nothing is ever dropped. */
+var STORE_SHEETS = {
+  "Tyee Music Hoodies":        { orders: "Hoodie Order",          items: "Hoodie Line Items",
+                                 email: "Tyee Music Hoodie" },
+  "Winter Concert Fundraiser": { orders: "Winter Concert Orders", items: "Winter Concert Line Items",
+                                 email: "Tyee Winter Concert" }
+};
+
+/* Where an order with no store lands: the hoodie tabs, so rows from an older
+   copy of the website still arrive somewhere sensible. */
+var DEFAULT_SHEETS = { orders: "Order", items: "Line Items",
+                       email: "Tyee Music" };
 
 var ORDER_HEADERS = [
-  "Timestamp", "First Name", "Last Name", "Grade", "Elective", "Parent Email",
+  "Timestamp", "First Name", "Last Name", "Elective", "Level", "Parent Email",
   "Order Summary", "Total", "PayPal Order ID", "PayPal Capture ID",
-  "PayPal Status", "PayPal Amount", "Payer Name", "Payer Email", "Fulfilled?"
+  "PayPal Status", "PayPal Amount", "Payer Name", "Payer Email", "Fulfilled?",
+  "Store"
 ];
 
 var ITEM_HEADERS = [
-  "Timestamp", "First Name", "Last Name", "Grade", "Elective",
+  /* No Store column here: each store has its own Line Items tab, so every row
+     on a tab is from the same store. The Orders tab still carries it. */
+  "Timestamp", "First Name", "Last Name", "Elective", "Level",
   "Product", "Size", "Quantity", "Line Total", "PayPal Capture ID"
 ];
 
@@ -31,7 +60,12 @@ var ITEM_HEADERS = [
 
 function doGet() {
   return ContentService
-    .createTextOutput(JSON.stringify({ ok: true, service: "Amplify Tyee order recorder" }))
+    .createTextOutput(JSON.stringify({
+      ok: true,
+      service: "Amplify Tyee order recorder",
+      version: SCRIPT_VERSION,
+      orderColumns: ORDER_HEADERS.join(" | ")
+    }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -53,16 +87,19 @@ function doPost(e) {
     var now = new Date();
     var items = order.items || [];
     var summary = items.map(function (i) {
-      return i.quantity + " x " + i.product + " (" + (i.sizeShort || i.size) + ")";
+      var size = i.sizeShort || i.size;      // gift cards and combos have none
+      return i.quantity + " x " + i.product + (size ? " (" + size + ")" : "");
     }).join(", ");
 
-    /* ---- Orders sheet ---- */
-    sheet(ORDERS_SHEET, ORDER_HEADERS).appendRow([
+    var tabs = sheetsFor(order.store);
+
+    /* ---- Orders sheet (this store's) ---- */
+    sheet(tabs.orders, ORDER_HEADERS).appendRow([
       now,
       order.firstName || "",
       order.lastName || "",
-      order.grade || "",
       order.elective || "",
+      order.level || "",      // the level that page asked for, beside Elective
       order.parentEmail || "",
       summary,
       order.total || "",
@@ -72,18 +109,19 @@ function doPost(e) {
       order.paypalAmount || "",
       order.payerName || "",
       order.payerEmail || "",
-      ""                      // Fulfilled? — for the board to tick off by hand
+      "",                     // Fulfilled? — for the board to tick off by hand
+      order.store || ""       // which ordering page this came from
     ]);
 
-    /* ---- Line Items sheet (one row per color+size, for ordering stock) ---- */
-    var itemSheet = sheet(ITEMS_SHEET, ITEM_HEADERS);
+    /* ---- Line Items sheet (one row per item, for ordering stock) ---- */
+    var itemSheet = sheet(tabs.items, ITEM_HEADERS);
     items.forEach(function (i) {
       itemSheet.appendRow([
         now,
         order.firstName || "",
         order.lastName || "",
-        order.grade || "",
         order.elective || "",
+        order.level || "",
         i.product || "",
         i.size || "",
         i.quantity || 0,
@@ -112,6 +150,20 @@ function json(obj) {
                        .setMimeType(ContentService.MimeType.JSON);
 }
 
+// What the emails call this store: "New Tyee Music Hoodie order", "Your Tyee
+// Winter Concert order". Falls back to the store's full label if none is set above.
+function emailName(store) {
+  var tabs = sheetsFor(store);
+  return tabs.email || store || "Tyee Music Hoodie";
+}
+
+// The pair of tab names a store writes to.
+function sheetsFor(store) {
+  if (!store) return DEFAULT_SHEETS;
+  if (STORE_SHEETS[store]) return STORE_SHEETS[store];
+  return { orders: store + " Orders", items: store + " Line Items" };
+}
+
 // Returns the named sheet, creating it with a frozen header row if needed.
 function sheet(name, headers) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -129,14 +181,19 @@ function sheet(name, headers) {
 
 function notify(order, summary) {
   var student = (order.firstName || "") + " " + (order.lastName || "");
-  var subject = "New hoodie order: " + student + " ($" + (order.total || "0.00") + ")";
+  var store = emailName(order.store);
+  var subject = "New " + store + " order: " + student + " ($" + (order.total || "0.00") + ")";
+
+  // Print only the answers this order actually carries.
+  var who = [["Elective: ", order.elective], ["Level:    ", order.level]]
+    .filter(function (p) { return p[1]; })
+    .map(function (p) { return p[0] + " " + p[1]; });
 
   var lines = [
-    "A new Tyee music hoodie order was paid online.",
+    "A new " + store + " order was paid online.",
     "",
-    "Student:   " + student,
-    "Grade:     " + (order.grade || ""),
-    "Elective:  " + (order.elective || ""),
+    "Student:   " + student
+  ].concat(who).concat([
     "Parent:    " + (order.parentEmail || ""),
     "",
     "Order:     " + summary,
@@ -146,8 +203,8 @@ function notify(order, summary) {
     "PayPal status:     " + (order.paypalStatus || ""),
     "Paid by:           " + (order.payerName || "") + " <" + (order.payerEmail || "") + ">",
     "",
-    "Full details are in the Google Sheet."
-  ].join("\n");
+    "Full details are in the Google Sheet, on the " + sheetsFor(order.store).orders + " tab."
+  ]).join("\n");
 
   try {
     MailApp.sendEmail(BOARD_EMAIL, subject, lines);
@@ -161,7 +218,7 @@ function notify(order, summary) {
       "",
       "Thank you for your order and for supporting Tyee Music!",
       "",
-      "Student: " + student + " (" + (order.grade || "") + ", " + (order.elective || "") + ")",
+      "Student: " + student + " (" + [order.elective, order.level].filter(Boolean).join(", ") + ")",
       "Order:   " + summary,
       "Total:   $" + (order.total || "0.00")
     ];
@@ -178,9 +235,14 @@ function notify(order, summary) {
       );
     }
 
+    // Each store says how its goods reach the student (THANK_YOU in
+    // config.js), so this line suits hoodies and concert treats alike.
+    var fulfilment = order.thankYou ||
+      "Once the sweatshirts arrive, we will deliver them to your student in class.";
+
     var parentBody = parentLines.concat([
       "",
-      "Once the sweatshirts arrive, we will deliver them to your student in class.",
+      fulfilment,
       "",
       "All items are made to order and all sales are final. No refunds or",
       "exchanges are available.",
@@ -194,7 +256,7 @@ function notify(order, summary) {
     try {
       MailApp.sendEmail({
         to: order.parentEmail,
-        subject: "Your Tyee music hoodie order",
+        subject: "Your " + store + " order",
         body: parentBody,
         name: "Amplify Tyee",
         replyTo: BOARD_EMAIL
@@ -211,7 +273,9 @@ function notify(order, summary) {
 /* ---------------------------------------------------------------------- */
 function testOrder() {
   var fake = {
-    firstName: "Test", lastName: "Student", grade: "7th Grade", elective: "Band",
+    store: "Tyee Music Hoodies",
+    thankYou: "Once the sweatshirts arrive, we will deliver them to your student in class.",
+    firstName: "Test", lastName: "Student", elective: "Band", level: "Intermediate(7)",
     parentEmail: BOARD_EMAIL, total: "70.00", currency: "USD",
     paypalOrderId: "TEST-ORDER", paypalCaptureId: "TEST-CAPTURE",
     paypalStatus: "COMPLETED", paypalAmount: "70.00",
@@ -221,6 +285,29 @@ function testOrder() {
         quantity: 1, unitPrice: "35.00", lineTotal: "35.00" },
       { product: "Black Sweatshirt", size: "Adult L", sizeShort: "Adult L",
         quantity: 1, unitPrice: "35.00", lineTotal: "35.00" }
+    ]
+  };
+  var res = doPost({ postData: { contents: JSON.stringify(fake) } });
+  console.log(res.getContent());
+}
+
+/* The same, for the winter concert store: proves an order lands on the
+   "Winter Concert Orders" / "Winter Concert Line Items" tabs (which this
+   creates, with headers, the first time it runs) and not on the hoodie tabs. */
+function testWinterConcertOrder() {
+  var fake = {
+    store: "Winter Concert Fundraiser",
+    thankYou: "Your order will be ready for pickup at the winter concert.",
+    firstName: "Test", lastName: "Student", elective: "Choir", level: "Entry(6)",
+    parentEmail: BOARD_EMAIL, total: "36.00", currency: "USD",
+    paypalOrderId: "TEST-ORDER", paypalCaptureId: "TEST-CAPTURE",
+    paypalStatus: "COMPLETED", paypalAmount: "36.00",
+    payerName: "Test Payer", payerEmail: BOARD_EMAIL,
+    items: [
+      { product: "Concert Combo", size: "", sizeShort: "",
+        quantity: 1, unitPrice: "11.00", lineTotal: "11.00" },
+      { product: "Kizuki Ramen Gift Card", size: "", sizeShort: "",
+        quantity: 1, unitPrice: "25.00", lineTotal: "25.00" }
     ]
   };
   var res = doPost({ postData: { contents: JSON.stringify(fake) } });
