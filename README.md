@@ -150,32 +150,11 @@ row on it is from the same store; the orders tabs keep theirs. There is no *Grad
 both pages ask for **Level(Grade)**, and the level name carries the grade in brackets. Gift cards
 and combos have no *Size*.
 
-> **Rename the hoodie tabs first.** They are still called *Orders* and *Line Items*; the script
-> now writes to *Hoodie Order* and *Hoodie Line Items*. Rename them (double-click the tab name)
-> **before** the next order - otherwise the script creates two new empty tabs under those names
-> and the 2026 hoodie orders are left behind in the old ones.
->
-> **One-off for the existing hoodie tabs.** The script only writes a header row into an *empty*
-> tab, and the column layout changed (no more *Grade*, a *Level* column beside *Elective*, and
-> *Store* at the end of the orders tab only), so the two tabs that already hold orders have to be
-> rearranged once by hand. Do this **before** the next order comes in, or that row will be a
-> column out of step.
->
-> On *Hoodie Order*:
->
-> 1. **Delete column D (*Grade*).** No page asks for a school grade any more - the level name
->    carries it in brackets. To keep the 2026 grades, drag that column to the far right of the
->    data instead of deleting it, and ignore it in the steps below.
-> 2. Right-click column **E** (*Parent Email*) -> **Insert 1 column left**, and put `Level` in `E1`.
-> 3. Type `Store` in `P1`.
->
-> On *Hoodie Line Items*, two moves - there is no *Store* column here:
->
-> 1. Delete column D (*Grade*).
-> 2. Insert 1 column left of **E** (*Product*), and put `Level` in `E1`.
->
-> Read across row 1 afterwards to check: *Elective* and *Level* side by side; on the orders tab
-> *Store* is last, and the line-items tab ends at *PayPal Capture ID*.
+> **Already done (2026-11-24).** The two tabs that pre-date this layout were renamed from
+> *Orders* / *Line Items* to *Hoodie Order* / *Hoodie Line Items*, the old *Grade* column was
+> taken out, `Level` was inserted beside *Elective*, and `Store` was added at the end of the
+> orders tab. Nothing further is needed in the spreadsheet; a new store's tabs are created by
+> the script with the right headers the first time it sells something.
 
 - **Tally the vendor order:** on *Line Items*, Insert → Pivot table; Rows = Product and Size,
   Values = SUM of Quantity.
