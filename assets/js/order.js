@@ -181,6 +181,8 @@
       lines.push({
         id: p.id,
         name: p.name,
+        code: p.code || p.name,       // what the Sheet stores; the full name if no code
+
         qty: qty,
         unitCents: toCents(p.price),
         sizeShort: size ? size.name : null
@@ -309,7 +311,11 @@
         // Code.gs writes "size" to the Sheet and uses "sizeShort" in emails; both are the
         // size name (e.g. "Adult M"). Keep both keys so the deployed script needs no change.
         return {
-          product: l.name, size: l.sizeShort || "", sizeShort: l.sizeShort || "",
+          // "product" is written to the Sheet, "productName" is what the emails
+          // and the PayPal line read, so the sheet stays short and the parent
+          // still sees what they bought.
+          product: l.code, productName: l.name,
+          size: l.sizeShort || "", sizeShort: l.sizeShort || "",
           quantity: l.qty, unitPrice: (l.unitCents / 100).toFixed(2),
           lineTotal: (l.unitCents * l.qty / 100).toFixed(2)
         };
@@ -354,7 +360,8 @@
     document.getElementById("receipt-thanks").textContent = CFG.THANK_YOU || "";
 
     var rows = order.items.map(function (i) {
-      return "<li><span>" + esc(i.product) +
+      // The full name here: "product" carries the short code for the Sheet.
+      return "<li><span>" + esc(i.productName || i.product) +
              (i.sizeShort ? ' <em class="sz">' + esc(i.sizeShort) + "</em>" : "") +
              ' <span class="qx">&times;' + i.quantity + "</span></span><span>$" +
              esc(i.lineTotal) + "</span></li>";
@@ -578,8 +585,11 @@
               breakdown: { item_total: { currency_code: CUR, value: pendingOrder.total } }
             },
             items: pendingOrder.items.map(function (i) {
+              // PayPal's checkout and its own receipt are read by the buyer, so
+              // the full name belongs here too, not the Sheet's short code.
+              var label = i.productName || i.product;
               return {
-                name: (i.sizeShort ? i.product + " — " + i.sizeShort : i.product).slice(0, 127),
+                name: (i.sizeShort ? label + " — " + i.sizeShort : label).slice(0, 127),
                 description: ("For " + student + (about ? " (" + about + ")" : "")).slice(0, 127),
                 quantity: String(i.quantity),
                 unit_amount: { currency_code: CUR, value: i.unitPrice },

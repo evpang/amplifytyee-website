@@ -142,16 +142,18 @@ window.AMPLIFY_CONFIG = {
       ],
 
       /* --------------------------------------------------------------------
-         PRODUCTS — to change a price, edit "price". To take a color off sale
+         PRODUCTS — "code" is the short label stored in the spreadsheet (Red,
+         White, ...) while "name" is what shoppers and emails read.
+         To change a price, edit "price". To take a color off sale
          without losing its settings, add  available: false  to its block (see
          the winter concert store below); to retire it for good, delete the
          block. To add one, copy a block and put the image in assets/img/.
          -------------------------------------------------------------------- */
       PRODUCTS: [
-        { id: "red",   name: "Red Sweatshirt",   price: 35.00, image: "assets/img/red.png"   },
-        { id: "white", name: "White Sweatshirt", price: 35.00, image: "assets/img/white.png" },
-        { id: "black", name: "Black Sweatshirt", price: 35.00, image: "assets/img/black.png" },
-        { id: "grey",  name: "Grey Sweatshirt",  price: 35.00, image: "assets/img/grey.png"  }
+        { id: "red",   code: "Red",   name: "Red Sweatshirt",   price: 35.00, image: "assets/img/red.png"   },
+        { id: "white", code: "White", name: "White Sweatshirt", price: 35.00, image: "assets/img/white.png" },
+        { id: "black", code: "Black", name: "Black Sweatshirt", price: 35.00, image: "assets/img/black.png" },
+        { id: "grey",  code: "Grey",  name: "Grey Sweatshirt",  price: 35.00, image: "assets/img/grey.png"  }
       ],
 
       /* Shown on the receipt, and in the parent's confirmation email, as the
@@ -191,10 +193,14 @@ window.AMPLIFY_CONFIG = {
                             true to put it out again - its price and picture
                             wait here in the meantime. Switch every item off
                             and the page says ordering is not open. */
+      /* "name" is what shoppers read; "code" is the short label written to the
+         spreadsheet and used in the order summary, so the columns stay narrow
+         and a vendor count is easy to read. Leave "code" out and the full name
+         is stored instead (that is what the hoodie store does). */
       PRODUCTS: [
-        { id: "combo",       name: "Concert Combo (Flower, Cookie & Card)", price: 11.00, available: true, image: "assets/img/WinterConcert/concert-combo.jpg" },
-        { id: "happy-lemon", name: "Happy Lemon $25 Gift Card",  price: 25.00, available: true, image: "assets/img/WinterConcert/happy-lemon.jpg"   },
-        { id: "kizuki",      name: "Kizuki Ramen $25 Gift Card", price: 25.00, available: true, image: "assets/img/WinterConcert/kizuki-ramen.jpg"  }
+        { id: "combo",       code: "Combo",        name: "Concert Combo (Flower, Cookie & Card)", price: 11.00, available: true, image: "assets/img/WinterConcert/concert-combo.jpg" },
+        { id: "happy-lemon", code: "HappyLemonGC", name: "Happy Lemon $25 Gift Card",             price: 25.00, available: true, image: "assets/img/WinterConcert/happy-lemon.jpg"   },
+        { id: "kizuki",      code: "KizukiGC",     name: "Kizuki Ramen $25 Gift Card",            price: 25.00, available: true, image: "assets/img/WinterConcert/kizuki-ramen.jpg"  }
       ],
 
       THANK_YOU: "Your order will be ready for pickup at the winter concert.",

@@ -141,6 +141,11 @@ is nothing to set up by hand for a new store.
 Parent Email · Order Summary · Total · PayPal Order ID · PayPal Capture ID · PayPal Status ·
 PayPal Amount · Payer Name · Payer Email · Fulfilled? · Store
 
+Products are stored by their short **code** (`Red`, `White`, `Black`, `Grey`, `Combo`,
+`HappyLemonGC`, `KizukiGC`), set next to the full name in `assets/js/config.js`. The emails show
+the full name instead, so a parent reads "Concert Combo (Flower, Cookie & Card)" while the sheet
+says `Combo`. Rows written before 2026-11-24 hold full names.
+
 **Line Items tab columns (A-J):** Timestamp · First Name · Last Name · Elective · **Level** ·
 Product · Size · Quantity · Line Total · PayPal Capture ID
 

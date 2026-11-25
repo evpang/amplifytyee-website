@@ -319,7 +319,11 @@ mode** (Live Client ID verified as `production`, buttons render, no test notice)
 buttons (PayPal campaign + Zelle), Tyee Music logo in header, Facebook/YouTube in menu and
 cards.
 
-**Apps Script is current: `2026-11-24h` deployed and confirmed live.** Each store in
+**Apps Script is current: `2026-11-24i` deployed and confirmed live.** Products carry a short
+`code` in `config.js` (Red/White/Black/Grey, Combo/HappyLemonGC/KizukiGC): the page sends it as
+`product` and the full name as `productName`, so the Sheet stores codes (Product column and
+Order Summary) while the emails read the long names - `summarise(items, useLongName)` builds
+both. A product with no `code` falls back to its name. Each store in
 `STORE_SHEETS` carries its own tab pair, short `email` name and `terms` line (hoodies say "made to
 order and all sales are final", the winter concert just "All sales are final"). Tabs *Hoodie Order* /
 *Hoodie Line Items* and *Winter Concert Orders* / *Winter Concert Line Items*; orders A-P

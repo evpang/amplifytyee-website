@@ -22,7 +22,7 @@
    site uses was not updated - most often because "Manage deployments ->
    Edit -> New version" was run on a different deployment than the one whose
    URL is in config.js. */
-var SCRIPT_VERSION = "2026-11-24h";
+var SCRIPT_VERSION = "2026-11-24i";
 
 var BOARD_EMAIL = "amplifytyee@gmail.com";   // who gets each order notification
 var SEND_PARENT_CONFIRMATION = true;         // also email the parent a copy
@@ -43,9 +43,9 @@ var STORE_SHEETS = {
 
 /* Where an order with no store lands: the hoodie tabs, so rows from an older
    copy of the website still arrive somewhere sensible. */
-var DEFAULT_SHEETS = { orders: "Hoodie Order", items: "Hoodie Line Items",
-                       email: "Tyee Music Hoodie",
-                       terms: "All items are made to order and all sales are final. " +
+var DEFAULT_SHEETS = { orders: "Order", items: "Line Items",
+                       email: "Tyee Music",
+                       terms: "All sales are final. " +
                               "No refunds or exchanges are available." };
 
 var ORDER_HEADERS = [
@@ -92,10 +92,13 @@ function doPost(e) {
     var order = JSON.parse(e.postData.contents);
     var now = new Date();
     var items = order.items || [];
-    var summary = items.map(function (i) {
-      var size = i.sizeShort || i.size;      // gift cards and combos have none
-      return i.quantity + " x " + i.product + (size ? " (" + size + ")" : "");
-    }).join(", ");
+    /* Two summaries of the same order. The Sheet gets the short codes the
+       page sent in "product" (Combo, HappyLemonGC, ...); the emails get
+       "productName", the full name a parent would recognise. A page that
+       sends no productName falls back to the code, so older copies of the
+       website still read sensibly. */
+    var sheetSummary = summarise(items, false);
+    var mailSummary = summarise(items, true);
 
     var tabs = sheetsFor(order.store);
 
@@ -107,7 +110,7 @@ function doPost(e) {
       order.elective || "",
       order.level || "",      // the level that page asked for, beside Elective
       order.parentEmail || "",
-      summary,
+      sheetSummary,
       order.total || "",
       order.paypalOrderId || "",
       order.paypalCaptureId || "",
@@ -136,7 +139,7 @@ function doPost(e) {
       ]);
     });
 
-    notify(order, summary);
+    notify(order, mailSummary);
     return json({ ok: true });
 
   } catch (err) {
@@ -150,6 +153,16 @@ function doPost(e) {
 }
 
 /* ------------------------------- helpers ------------------------------- */
+
+/* "2 x Combo" for the Sheet, "2 x Concert Combo (Flower, Cookie & Card)" for
+   an email. Sizes are appended where the store has them. */
+function summarise(items, useLongName) {
+  return items.map(function (i) {
+    var label = useLongName ? (i.productName || i.product) : (i.product || i.productName);
+    var size = i.sizeShort || i.size;        // gift cards and combos have none
+    return i.quantity + " x " + label + (size ? " (" + size + ")" : "");
+  }).join(", ");
+}
 
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
