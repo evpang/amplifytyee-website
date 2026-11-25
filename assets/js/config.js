@@ -84,7 +84,12 @@ window.AMPLIFY_CONFIG = {
        and the thank-you page becomes a link they can choose.
        ---------------------------------------------------------------------- */
     AFTER_ORDER_URL: "thank-you.html",
-    AFTER_ORDER_DELAY: 7
+    AFTER_ORDER_DELAY: 7,
+
+    /* true adds a "Place another order" link to the receipt, pointing back at
+       the same ordering page with an empty form. Off here, on for the winter
+       concert, where the receipt is the last thing a buyer sees. */
+    ORDER_AGAIN_LINK: false
   },
 
   /* ======================================================================
@@ -149,8 +154,11 @@ window.AMPLIFY_CONFIG = {
         { id: "grey",  name: "Grey Sweatshirt",  price: 35.00, image: "assets/img/grey.png"  }
       ],
 
-      /* Shown after a successful payment. */
-      THANK_YOU: "Thank you for your purchase and for supporting Tyee Music! Once the sweatshirts arrive, we will deliver them to your student in class.",
+      /* Shown on the receipt, and in the parent's confirmation email, as the
+         line that says how the goods reach the student. Keep it to that: the
+         email already opens with "Thank you for your order and for supporting
+         Tyee Music!", so a thank-you here reads twice. */
+      THANK_YOU: "Once the sweatshirts arrive, we will deliver them to your student in class.",
 
       /* Shown in the notice once ordering has closed. Leave out for none. */
       CLOSED_NOTE: "Hoodies are delivered to students in class about a month after the order window closes."
@@ -169,6 +177,14 @@ window.AMPLIFY_CONFIG = {
 
       SIZES: [],                     /* none: these are not garments */
 
+      ORDER_AGAIN_LINK: true,        /* "Place another order" on the receipt */
+
+      /* Stay on the receipt after paying instead of going to thank-you.html
+         (which DEFAULTS sends the hoodie store to): the receipt already lists
+         what was ordered and says it is picked up at the concert. Put a page
+         name here to send buyers onward. */
+      AFTER_ORDER_URL: "",
+
       /* available: true  = on sale.
          available: false = off sale. The item vanishes from the page, so
                             nobody can add it or pay for it. Flip it back to
@@ -181,7 +197,7 @@ window.AMPLIFY_CONFIG = {
         { id: "kizuki",      name: "Kizuki Ramen $25 Gift Card", price: 25.00, available: true, image: "assets/img/WinterConcert/kizuki-ramen.jpg"  }
       ],
 
-      THANK_YOU: "Thank you for supporting Tyee Music! Your order will be ready for pickup at the winter concert.",
+      THANK_YOU: "Your order will be ready for pickup at the winter concert.",
 
       CLOSED_NOTE: "Orders are picked up at the winter concert."
     }

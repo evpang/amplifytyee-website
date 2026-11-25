@@ -113,6 +113,13 @@ Store behavior worth knowing:
 - `config.js` strings: a straight `"` inside a label (e.g. `58"`) breaks the file and the whole
   store (no products, no PayPal). The maintainer did this once by hand. After any edit, run
   the config-parses check below; use curly `”` `’`.
+- **Clicking a product picture opens it larger.** `renderProducts()` wraps each thumbnail in a
+  `button.zoom-open`, and `setupImageZoom()` in `order.js` builds one `<dialog id="image-zoom">`
+  at startup and appends it to `<body>` (never inside `<form>`, or its buttons would submit it).
+  Same pattern as the size chart: x, Esc handled explicitly, backdrop click, focus back on the
+  thumbnail that opened it. It is in `order.js`, so **every** ordering page gets it, not just the
+  winter concert; the enlarged picture is just the product image at its natural size, so keep
+  those files reasonably big (the winter ones are 760px).
 - **Each product has an on/off switch.** `available: false` on a `PRODUCTS` entry takes that item
   off sale: `order.js` filters it out of `PRODUCTS` at startup, so it never renders, can't be
   selected, priced or paid for, and no other code has to know. An entry with no `available` key is
@@ -312,7 +319,9 @@ mode** (Live Client ID verified as `production`, buttons render, no test notice)
 buttons (PayPal campaign + Zelle), Tyee Music logo in header, Facebook/YouTube in menu and
 cards.
 
-**Apps Script is current: `2026-11-24g` deployed and confirmed live.** Tabs *Hoodie Order* /
+**Apps Script is current: `2026-11-24h` deployed and confirmed live.** Each store in
+`STORE_SHEETS` carries its own tab pair, short `email` name and `terms` line (hoodies say "made to
+order and all sales are final", the winter concert just "All sales are final"). Tabs *Hoodie Order* /
 *Hoodie Line Items* and *Winter Concert Orders* / *Winter Concert Line Items*; orders A-P
 (Elective, Level, ..., Fulfilled?, Store), line items A-J (no Store - one store per tab); no
 Grade column; emails titled "New Tyee Music Hoodie order" / "New Tyee Winter Concert order".

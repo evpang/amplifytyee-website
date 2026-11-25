@@ -132,13 +132,19 @@
       return (
         '<div class="product" data-product="' + esc(p.id) + '">' +
           '<div class="product-img">' +
-            '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy" width="368" height="392">' +
+            '<button type="button" class="zoom-open" data-zoom="' + esc(p.id) + '" ' +
+                    'aria-label="See a larger picture of ' + esc(p.name) + '">' +
+              '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy" width="368" height="392">' +
+            "</button>" +
           "</div>" +
           '<div class="product-body">' +
             '<h3 class="product-name">' + esc(p.name) + "</h3>" +
             '<p class="product-price">' + money(toCents(p.price)) + "</p>" +
             '<div class="product-controls">' +
-              '<div class="field">' +
+              // Quantity goes on one line with its label only where it is the whole
+              // control row. On a store with sizes it sits beside the Size block,
+              // which is a stacked label + dropdown, and the two look misaligned.
+              '<div class="field' + (HAS_SIZES ? "" : " field-qty") + '">' +
                 '<label for="qty-' + esc(p.id) + '">Quantity</label>' +
                 '<select id="qty-' + esc(p.id) + '" class="qty" data-qty="' + esc(p.id) + '">' + qtyOpts + "</select>" +
               "</div>" +
@@ -377,7 +383,20 @@
     successEl.focus();
     successEl.scrollIntoView({ behavior: "smooth", block: "start" });
 
+    orderAgainLink();
     sendOnward(recorded);
+  }
+
+  /* Optional link back to this same ordering page, for a parent who wants to
+     place a second order (a gift card for another family, another hoodie).
+     ORDER_AGAIN_LINK in config.js switches it on per store. The href drops any
+     query string, so the page comes back with an empty form. */
+  function orderAgainLink() {
+    if (!CFG.ORDER_AGAIN_LINK) return;
+    var p = document.createElement("p");
+    p.className = "receipt-note";
+    p.innerHTML = '<a href="' + esc(location.pathname) + '">&larr; Place another order</a>';
+    successEl.appendChild(p);
   }
 
   /* After a paid order, move the parent to the thank-you page. The receipt is
@@ -662,11 +681,59 @@
     dialog.addEventListener("click", function (e) { if (e.target === dialog) close(); });
   }
 
+  /* Clicking a product picture opens it larger. The dialog is built here
+     rather than in the page, so every ordering page gets it for free. It is
+     appended to <body>, never inside <form>, or its buttons would submit it. */
+  function setupImageZoom() {
+    var dialog = document.createElement("dialog");
+    dialog.id = "image-zoom";
+    dialog.className = "zoom-dialog";
+    dialog.setAttribute("aria-label", "Product picture");
+    dialog.innerHTML =
+      '<button type="button" class="dialog-close zoom-close" aria-label="Close">&times;</button>' +
+      '<img class="zoom-img" src="" alt="">' +
+      '<p class="zoom-caption"></p>';
+    document.body.appendChild(dialog);
+
+    var img = dialog.querySelector(".zoom-img");
+    var caption = dialog.querySelector(".zoom-caption");
+    var opener = null;                 // the thumbnail to put focus back on
+
+    function close() {
+      if (typeof dialog.close === "function") dialog.close();
+      else dialog.removeAttribute("open");
+    }
+
+    productsEl.addEventListener("click", function (e) {
+      var btn = e.target.closest(".zoom-open");
+      if (!btn) return;
+      var product = null;
+      PRODUCTS.forEach(function (p) { if (p.id === btn.getAttribute("data-zoom")) product = p; });
+      if (!product) return;
+      opener = btn;
+      img.src = product.image;
+      img.alt = product.name;
+      caption.textContent = product.name;
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+    });
+
+    dialog.querySelector(".zoom-close").addEventListener("click", close);
+    // Esc: some browsers do this themselves, not all of them reliably.
+    dialog.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { e.preventDefault(); close(); }
+    });
+    // A click on the dialog element itself landed on the dimmed backdrop.
+    dialog.addEventListener("click", function (e) { if (e.target === dialog) close(); });
+    dialog.addEventListener("close", function () { if (opener) opener.focus(); });
+  }
+
   /* ----------------------------------------------------------------- init */
 
   renderProducts();
   recompute();
   if (HAS_SIZES) setupSizeChart();
+  setupImageZoom();
 
   form.addEventListener("change", function (e) {
     if (e.target.matches(".qty, .size")) recompute();

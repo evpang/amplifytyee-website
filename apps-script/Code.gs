@@ -22,7 +22,7 @@
    site uses was not updated - most often because "Manage deployments ->
    Edit -> New version" was run on a different deployment than the one whose
    URL is in config.js. */
-var SCRIPT_VERSION = "2026-11-24g";
+var SCRIPT_VERSION = "2026-11-24h";
 
 var BOARD_EMAIL = "amplifytyee@gmail.com";   // who gets each order notification
 var SEND_PARENT_CONFIRMATION = true;         // also email the parent a copy
@@ -32,15 +32,21 @@ var SEND_PARENT_CONFIRMATION = true;         // also email the parent a copy
    "<Store> Line Items"), so nothing is ever dropped. */
 var STORE_SHEETS = {
   "Tyee Music Hoodies":        { orders: "Hoodie Order",          items: "Hoodie Line Items",
-                                 email: "Tyee Music Hoodie" },
+                                 email: "Tyee Music Hoodie",
+                                 terms: "All items are made to order and all sales are final. " +
+                                        "No refunds or exchanges are available." },
   "Winter Concert Fundraiser": { orders: "Winter Concert Orders", items: "Winter Concert Line Items",
-                                 email: "Tyee Winter Concert" }
+                                 email: "Tyee Winter Concert",
+                                 /* treats and gift cards are not made to order */
+                                 terms: "All sales are final. No refunds or exchanges are available." }
 };
 
 /* Where an order with no store lands: the hoodie tabs, so rows from an older
    copy of the website still arrive somewhere sensible. */
-var DEFAULT_SHEETS = { orders: "Order", items: "Line Items",
-                       email: "Tyee Music" };
+var DEFAULT_SHEETS = { orders: "Hoodie Order", items: "Hoodie Line Items",
+                       email: "Tyee Music Hoodie",
+                       terms: "All items are made to order and all sales are final. " +
+                              "No refunds or exchanges are available." };
 
 var ORDER_HEADERS = [
   "Timestamp", "First Name", "Last Name", "Elective", "Level", "Parent Email",
@@ -157,6 +163,11 @@ function emailName(store) {
   return tabs.email || store || "Tyee Music Hoodie";
 }
 
+// The sales-final wording for this store's parent email.
+function termsLine(store) {
+  return sheetsFor(store).terms || "";
+}
+
 // The pair of tab names a store writes to.
 function sheetsFor(store) {
   if (!store) return DEFAULT_SHEETS;
@@ -244,8 +255,7 @@ function notify(order, summary) {
       "",
       fulfilment,
       "",
-      "All items are made to order and all sales are final. No refunds or",
-      "exchanges are available.",
+      termsLine(order.store),
       "",
       "Questions? Just reply to this email or write to " + BOARD_EMAIL + ".",
       "",

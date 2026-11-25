@@ -34,7 +34,11 @@
 /* Panels ----------------------------------------------------------------- */
 .panel {
   border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff;
-  box-shadow: var(--shadow); padding: 26px; margin: 0 0 22px; min-width: 0;
+  box-shadow: var(--shadow); margin: 0 0 22px; min-width: 0;
+  /* Tightened 2026-11-24: the first field sat 26px below the step heading,
+     then 14px. The legend straddles the top border, so this padding is the
+     whole visible gap under it. */
+  padding: 8px 26px 18px;
 }
 .panel > legend {
   display: flex; align-items: center; gap: 11px;
@@ -191,13 +195,52 @@ select:disabled { background-color: #f4f4f7; color: var(--muted); cursor: not-al
   flex: none; width: 118px; background: #fff; border-radius: 10px;
   border: 1px solid var(--line); padding: 8px;
 }
-.product-img img { width: 100%; height: auto; }
+/* The thumbnail is a button that opens the picture larger (order.js builds the
+   dialog). It must look like a plain picture, so the button chrome goes. */
+.product-img .zoom-open {
+  display: block; width: 100%; padding: 0; border: 0; background: none;
+  cursor: zoom-in; border-radius: 6px;
+}
+.product-img .zoom-open:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+.product-img img { width: 100%; height: auto; display: block; transition: transform .12s ease; }
+.product-img .zoom-open:hover img { transform: scale(1.04); }
+@media (prefers-reduced-motion: reduce) {
+  .product-img img { transition: none; }
+  .product-img .zoom-open:hover img { transform: none; }
+}
 .product-body { flex: 1 1 auto; min-width: 0; }
 .product-name { margin: 0 0 2px; font-size: 1.08rem; }
 .product-price { margin: 0 0 14px; font-weight: 700; color: var(--red); font-size: 1.06rem; }
 .product-controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
 .product-controls .field { margin: 0; }
 .product-controls select.qty { width: 84px; }
+/* Quantity sits beside its label on a store with no sizes (the winter concert).
+   order.js adds .field-qty only there: on the hoodie page Quantity shares the row
+   with the stacked Size block, and inline would leave the two out of step. */
+.product-controls .field-qty { display: flex; align-items: center; gap: 10px; }
+.product-controls .field-qty label { margin-bottom: 0; }
+
+/* Enlarged product picture ----------------------------------------------- */
+.zoom-dialog {
+  border: 0; padding: 0; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  background: #fff; color: var(--ink);
+  width: min(620px, calc(100vw - 32px)); max-width: none;
+  max-height: calc(100vh - 32px); overflow: auto;
+}
+.zoom-dialog::backdrop { background: rgba(20, 20, 30, .66); }
+.zoom-dialog .zoom-img {
+  display: block; width: 100%; height: auto;
+  max-height: calc(100vh - 150px); object-fit: contain; background: #fff;
+}
+.zoom-caption {
+  margin: 0; padding: 12px 52px 16px 18px; font-weight: 650; font-size: 1.02rem;
+}
+/* The close button floats over the picture's top-right corner. */
+.zoom-dialog .zoom-close {
+  position: absolute; top: 8px; right: 8px; z-index: 1;
+  background: rgba(255, 255, 255, .92); box-shadow: var(--shadow);
+}
+.zoom-dialog .zoom-close:hover { background: #fff; }
 
 /* Summary ---------------------------------------------------------------- */
 .summary {

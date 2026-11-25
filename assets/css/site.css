@@ -153,7 +153,10 @@ p { margin: 0 0 1em; }
 .acronym p:last-child { margin-bottom: 0; }
 
 /* Sections --------------------------------------------------------------- */
-.section { padding: clamp(46px, 7vw, 76px) 0; }
+/* The bands down the home page. Tightened 2026-11-24 from 46-76px: the
+   headings sat a long way below each band's top edge. thank-you.html sets
+   its own 24px, so it is unaffected. */
+.section { padding: clamp(28px, 3.4vw, 44px) 0; }
 .section-alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
 .section-head { max-width: 66ch; margin-bottom: 30px; }
 .section-head p { color: var(--ink-soft); margin-bottom: 0; }
